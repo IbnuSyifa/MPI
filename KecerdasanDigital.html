@@ -1,0 +1,2759 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kecerdasan Digital - Media Pembelajaran Interaktif</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Poppins', sans-serif; }
+    html, body { height: 100%; margin: 0; }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+    }
+    
+    .card-hover {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.4);
+    }
+    
+    .glow-effect {
+      box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+    }
+    
+    .floating {
+      animation: floating 3s ease-in-out infinite;
+    }
+    
+    @keyframes floating {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .pulse-glow {
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
+      50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); }
+    }
+    
+    .slide-in {
+      animation: slideIn 0.5s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .progress-bar {
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
+      background-size: 200% 100%;
+      animation: gradientMove 2s linear infinite;
+    }
+    
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+    
+    .cyber-grid {
+      background-image: 
+        linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+    
+    .text-gradient {
+      background: linear-gradient(135deg, #60a5fa, #a78bfa, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .nav-item {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .nav-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+    
+    .nav-item:hover::after {
+      width: 80%;
+    }
+    
+    .icon-container {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    
+    .quiz-option {
+      transition: all 0.3s ease;
+    }
+    
+    .quiz-option:hover {
+      transform: translateX(10px);
+      background: rgba(59, 130, 246, 0.2);
+    }
+    
+    .quiz-option.correct {
+      background: rgba(34, 197, 94, 0.3) !important;
+      border-color: #22c55e !important;
+    }
+    
+    .quiz-option.incorrect {
+      background: rgba(239, 68, 68, 0.3) !important;
+      border-color: #ef4444 !important;
+    }
+    
+    .infographic-card {
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
+    .scroll-container {
+      scrollbar-width: thin;
+      scrollbar-color: #3b82f6 #1e293b;
+    }
+    
+    .scroll-container::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .scroll-container::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
+    
+    .scroll-container::-webkit-scrollbar-thumb {
+      background: #3b82f6;
+      border-radius: 4px;
+    }
+    
+    .game-card {
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      position: relative;
+    }
+    
+    .game-card::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
+      border-radius: inherit;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .game-card:hover::before {
+      opacity: 1;
+    }
+
+    /* Snake Game Styles */
+    #gameCanvas {
+      background: linear-gradient(135deg, #0f172a, #1e3a5f);
+      border: 2px solid #3b82f6;
+      border-radius: 8px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* Tower Game Styles */
+    .tower-block {
+      transition: all 0.2s ease;
+    }
+
+    .tower-block.safe {
+      background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    }
+
+    .tower-block.danger {
+      background: linear-gradient(135deg, #ef4444, #f87171);
+    }
+
+    /* Cybersecurity Game Styles */
+    .threat-item {
+      animation: slideDown 0.5s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body class="h-full gradient-bg text-white overflow-auto scroll-container">
+  <div id="app" class="min-h-full w-full">
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-blue-500/20">
+      <div class="max-w-7xl mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3 cursor-pointer" onclick="showPage('home')">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+              <span class="text-xl">🧠</span>
+            </div>
+            <span id="app-title" class="font-bold text-lg hidden sm:block">Kecerdasan Digital</span>
+          </div>
+          <div class="flex items-center gap-1 sm:gap-4">
+            <button onclick="showPage('home')" class="nav-item px-2 sm:px-4 py-2 text-sm font-medium hover:text-blue-400 transition-colors">Beranda</button>
+            <button onclick="showPage('games')" class="nav-item px-2 sm:px-4 py-2 text-sm font-medium hover:text-blue-400 transition-colors">🎮 Game</button>
+            <button onclick="showPage('posttest')" class="nav-item px-2 sm:px-4 py-2 text-sm font-medium hover:text-blue-400 transition-colors">📝 Post Test</button>
+            <button onclick="showPage('scores')" class="nav-item px-2 sm:px-4 py-2 text-sm font-medium hover:text-blue-400 transition-colors">🏆 Nilai</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main id="main-content" class="pt-20 pb-8 px-4">
+      <!-- Pages will be rendered here -->
+    </main>
+  </div>
+
+  <script>
+    // Default configuration
+    const defaultConfig = {
+      app_title: 'Kecerdasan Digital'
+    };
+
+    let config = { ...defaultConfig };
+    let studentScores = [];
+    let currentPage = 'home';
+    let currentSlide = 0;
+    let currentQuiz = null;
+    let quizAnswered = false;
+
+    // Area Kompetensi Detail
+    const areaDetails = {
+      identitas: {
+        title: '🆔 Identitas Digital',
+        color: 'from-blue-500 to-indigo-600',
+        sections: [
+          {
+            subtitle: 'Definisi',
+            content: 'Identitas digital adalah representasi diri kita di dunia maya yang mencakup semua informasi pribadi, aktivitas, dan jejak yang kita tinggalkan di internet.'
+          },
+          {
+            subtitle: 'Komponen Utama',
+            items: [
+              '👤 Profil Online: Username, foto profil, bio di media sosial',
+              '📧 Akun Digital: Email, akun media sosial, akun aplikasi',
+              '📝 Konten yang Dibuat: Postingan, komentar, foto, video, artikel',
+              '🔗 Jejak Digital: Riwayat browsing, aktivitas yang tercatat'
+            ]
+          },
+          {
+            subtitle: 'Cara Membangun Identitas Digital yang Baik',
+            items: [
+              '✓ Gunakan nama yang profesional dan mudah diingat',
+              '✓ Pilih foto profil yang sopan dan representatif',
+              '✓ Tulis bio yang informatif dan jujur',
+              '✓ Konsisten dalam gaya dan konten yang dibagikan',
+              '✓ Jaga privasi dengan mengatur pengaturan akun'
+            ]
+          },
+          {
+            subtitle: 'Dampak Identitas Digital',
+            items: [
+              '🎯 Mempengaruhi reputasi pribadi',
+              '💼 Berpengaruh pada peluang karir di masa depan',
+              '👥 Membangun kepercayaan dalam komunitas online',
+              '🔍 Dapat ditemukan dan dianalisis oleh orang lain'
+            ]
+          }
+        ]
+      },
+      penggunaan: {
+        title: '⚖️ Penggunaan Digital',
+        color: 'from-green-500 to-emerald-600',
+        sections: [
+          {
+            subtitle: 'Definisi',
+            content: 'Penggunaan digital yang seimbang adalah kemampuan menggunakan teknologi dengan bijak tanpa mengorbankan kesehatan fisik, mental, dan hubungan sosial.'
+          },
+          {
+            subtitle: 'Waktu Penggunaan yang Direkomendasikan',
+            items: [
+              '👶 Anak-anak (5-12 tahun): Maksimal 1-2 jam per hari',
+              '👨 Remaja (13-18 tahun): Maksimal 2-4 jam per hari',
+              '🧑 Dewasa: Sesuaikan dengan kebutuhan pekerjaan, namun batasi hiburan',
+              '⏰ Istirahat: Minimal 20 menit istirahat untuk setiap 2 jam penggunaan'
+            ]
+          },
+          {
+            subtitle: 'Kategori Penggunaan',
+            items: [
+              '✅ Produktif (30-50%): Belajar, bekerja, komunikasi penting',
+              '🎮 Hiburan Sehat (30-40%): Gaming edukatif, konten kreatif',
+              '❌ Hiburan Pasif (0-20%): Scrolling sosmed, video tidak penting',
+              '🚫 Berbahaya (0%): Konten negatif, kecanduan'
+            ]
+          },
+          {
+            subtitle: 'Tanda-tanda Kecanduan Digital',
+            items: [
+              '😰 Sering merasa khawatir saat tidak bisa mengakses internet',
+              '⚠️ Mengabaikan aktivitas offline atau hobi lain',
+              '⚠️ Mengorbankan tidur, makan, atau belajar',
+              '⚠️ Hubungan sosial offline menjadi terganggu',
+              '⚠️ Tidak bisa mengurangi waktu penggunaan meski ingin'
+            ]
+          }
+        ]
+      },
+      keamanan: {
+        title: '🛡️ Keamanan Digital',
+        color: 'from-red-500 to-orange-600',
+        sections: [
+          {
+            subtitle: 'Definisi',
+            content: 'Keamanan digital adalah praktik melindungi data pribadi, akun, dan perangkat dari akses tidak sah dan penyalahgunaan.'
+          },
+          {
+            subtitle: 'Jenis-jenis Ancaman',
+            items: [
+              '🎣 Phishing: Penipuan melalui email/pesan palsu',
+              '🦠 Malware: Program berbahaya yang merusak sistem',
+              '🔓 Data Breach: Pembobolan data pribadi',
+              '🤖 Social Engineering: Manipulasi untuk membuka akses',
+              '⚠️ Man-in-the-Middle: Intersepsi komunikasi online'
+            ]
+          },
+          {
+            subtitle: 'Tips Keamanan Password',
+            items: [
+              '✓ Minimal 12 karakter dengan kombinasi: huruf besar, huruf kecil, angka, simbol',
+              '✓ Jangan gunakan informasi pribadi (nama, tanggal lahir)',
+              '✓ Gunakan password berbeda untuk setiap akun penting',
+              '✓ Aktifkan Two-Factor Authentication (2FA) di semua akun',
+              '✓ Ubah password secara berkala (setiap 3 bulan)',
+              '✓ Jangan bagikan password kepada siapapun'
+            ]
+          },
+          {
+            subtitle: 'Praktik Keamanan Terbaik',
+            items: [
+              '🔒 Selalu perbarui sistem operasi dan aplikasi',
+              '🔒 Gunakan antivirus dan firewall yang terpercaya',
+              '🔒 Jangan buka email atau link dari sumber tidak dikenal',
+              '🔒 Verifikasi keaslian website sebelum memasukkan data',
+              '🔒 Backup data penting secara berkala'
+            ]
+          }
+        ]
+      },
+      keselamatan: {
+        title: '🦺 Keselamatan Digital',
+        color: 'from-yellow-500 to-amber-600',
+        sections: [
+          {
+            subtitle: 'Definisi',
+            content: 'Keselamatan digital adalah upaya melindungi diri dari bahaya psikologis, sosial, dan fisik yang dapat terjadi di dunia maya.'
+          },
+          {
+            subtitle: 'Risiko Online Utama',
+            items: [
+              '😈 Cyberbullying: Perundungan melalui media digital',
+              '🎭 Predator Online: Orang dewasa berbahaya yang menargetkan anak',
+              '📰 Misinformasi/Hoax: Informasi palsu yang menyesatkan',
+              '🔞 Konten Tidak Pantas: Pornografi, kekerasan, atau konten esktrem',
+              '💀 Grooming: Manipulasi untuk tujuan eksploitasi'
+            ]
+          },
+          {
+            subtitle: 'Cara Melindungi Diri',
+            items: [
+              '🛡️ Jangan bagikan informasi pribadi ke orang asing online',
+              '🛡️ Blokir dan laporkan orang yang berperilaku mencurigakan',
+              '🛡️ Bicarakan dengan orang dewasa terpercaya jika merasa tidak aman',
+              '🛡️ Hati-hati dengan undangan untuk bertemu offline',
+              '🛡️ Gunakan fitur privasi di media sosial'
+            ]
+          },
+          {
+            subtitle: 'Tanda-tanda Perlunya Bantuan',
+            items: [
+              '⚠️ Menerima pesan mengancam atau menghina',
+              '⚠️ Ditanya untuk memberikan foto pribadi yang tidak pantas',
+              '⚠️ Ditawarkan hadiah atau uang oleh orang online yang baru',
+              '⚠️ Merasa cemas atau tertekan karena aktivitas online',
+              '⚠️ Melihat konten yang membuat Anda tidak nyaman'
+            ]
+          }
+        ]
+      },
+      emosional: {
+        title: '💝 Kecerdasan Emosional Digital',
+        color: 'from-pink-500 to-rose-600',
+        sections: [
+          {
+            subtitle: 'Definisi',
+            content: 'Kecerdasan emosional digital adalah kemampuan mengenali, memahami, dan mengelola emosi dalam interaksi online dengan diri sendiri dan orang lain.'
+          },
+          {
+            subtitle: 'Komponen EQ Digital',
+            items: [
+              '🪞 Self-Awareness: Mengenali emosi sendiri saat online',
+              '🧘 Self-Regulation: Mengontrol reaksi emosional',
+              '🤗 Empathy: Memahami perasaan orang lain di layar',
+              '💪 Motivation: Termotivasi untuk tujuan positif',
+              '🤝 Social Skills: Berkomunikasi dengan baik online'
+            ]
+          },
+          {
+            subtitle: 'Praktik EQ Digital',
+            items: [
+              '✨ Berpikir 5 detik sebelum mengirim pesan/komentar',
+              '✨ Hindari berkomentar saat marah atau emosi tinggi',
+              '✨ Gunakan emoji untuk memperjelas nada komunikasi',
+              '✨ Memberikan pujian dan dukungan kepada orang lain',
+              '✨ Meminta maaf jika melakukan kesalahan dalam komunikasi'
+            ]
+          },
+          {
+            subtitle: 'Mengatasi Stres Digital',
+            items: [
+              '🧘 Lakukan digital detox (istirahat dari gadget)',
+              '🧘 Atur notifikasi agar tidak terganggu terus-menerus',
+              '🧘 Batasi waktu melihat berita negatif',
+              '🧘 Bergabung dengan komunitas online yang positif',
+              '🧘 Praktikkan mindfulness dan meditasi'
+            ]
+          }
+        ]
+      },
+      komunikasi: {
+        title: '💬 Komunikasi Digital',
+        color: 'from-cyan-500 to-teal-600',
+        sections: [
+          {
+            subtitle: 'Definisi',
+            content: 'Komunikasi digital adalah proses pertukaran pesan, informasi, dan ide melalui platform dan media digital dengan cara yang efektif dan etis.'
+          },
+          {
+            subtitle: 'Etika Komunikasi Digital (Netiquette)',
+            items: [
+              '✓ Gunakan bahasa yang sopan dan menghormati',
+              '✓ Periksa ejaan dan tata bahasa sebelum mengirim',
+              '✓ Respons pesan dalam waktu yang wajar',
+              '✓ Jangan spam atau mengirim pesan berulang',
+              '✓ Hormati privasi dan rahasia orang lain',
+              '✓ Berikan sumber/kredensial saat menyebarkan informasi'
+            ]
+          },
+          {
+            subtitle: 'Yang Harus Dihindari',
+            items: [
+              '❌ MENULIS DENGAN HURUF KAPITAL SEMUA (terlihat berteriak)',
+              '❌ Mengirim pesan ofensif atau menghina',
+              '❌ Menyebarkan rumor atau gossip',
+              '❌ Mengirim konten tanpa ijin dari pemiliknya',
+              '❌ Menggunakan sarkasme yang bisa disalahpahami',
+              '❌ Membalas pesan saat emosi tinggi'
+            ]
+          },
+          {
+            subtitle: 'Platform Komunikasi',
+            items: [
+              '📱 Chat: WhatsApp, Telegram (komunikasi cepat)',
+              '📧 Email: Gmail, Outlook (komunikasi formal)',
+              '💬 Media Sosial: Instagram, Twitter (berbagi konten)',
+              '🎥 Video Call: Zoom, Google Meet (interaksi langsung)',
+              '📞 Telepon: Panggilan suara tradisional'
+            ]
+          }
+        ]
+      },
+      literasi: {
+        title: '📚 Literasi Digital',
+        color: 'from-indigo-500 to-violet-600',
+        sections: [
+          {
+            subtitle: 'Definisi',
+            content: 'Literasi digital adalah kemampuan untuk mengakses, memahami, menciptakan, dan berbagi informasi digital dengan cara yang aman, bijak, dan bertanggung jawab.'
+          },
+          {
+            subtitle: '4 Pilar Literasi Digital',
+            items: [
+              '🔍 Mencari (Search): Kemampuan menemukan informasi dengan efisien',
+              '🧐 Mengevaluasi (Evaluate): Cek kebenaran dan kredibilitas sumber',
+              '🎨 Membuat (Create): Kemampuan menghasilkan konten berkualitas',
+              '📤 Berbagi (Share): Menyebarkan informasi yang valid dan bermanfaat'
+            ]
+          },
+          {
+            subtitle: 'Cara Mengecek Kebenaran Informasi',
+            items: [
+              '✓ Periksa sumber: Apakah dari media terpercaya atau situs resmi?',
+              '✓ Bandingkan sumber: Apakah sumber lain melapor hal yang sama?',
+              '✓ Cek tanggal: Apakah informasi masih relevan/terbaru?',
+              '✓ Analisis bias: Apakah penulis memiliki kepentingan tertentu?',
+              '✓ Gunakan fact-checker: Snopes.com, Hoax.or.id, Cek Fakta TvOne'
+            ]
+          },
+          {
+            subtitle: 'Tanda-tanda Informasi Hoax',
+            items: [
+              '🚨 Judul sensasional dan clickbait',
+              '🚨 Sumber tidak jelas atau anonim',
+              '🚨 Tidak ada tanggal publikasi',
+              '🚨 Minta "dishare sebelum dihapus"',
+              '🚨 Mengandung teori konspirasi tanpa bukti',
+              '🚨 Emosi berlebihan dan pesan yang membangkang kemarahan'
+            ]
+          }
+        ]
+      },
+      hak: {
+        title: '⚖️ Hak Digital',
+        color: 'from-emerald-500 to-green-600',
+        sections: [
+          {
+            subtitle: 'Definisi',
+            content: 'Hak digital adalah hak fundamental yang dimiliki oleh setiap individu dalam mengakses, menggunakan, dan berpartisipasi di dunia digital.'
+          },
+          {
+            subtitle: 'Hak-Hak Digital',
+            items: [
+              '🏛️ Hak Privasi: Data pribadi Anda dilindungi dan tidak boleh disalahgunakan',
+              '🏛️ Hak Akses: Berhak mengakses internet dan informasi digital',
+              '🏛️ Hak Berekspresi: Bebas menyatakan pendapat secara online',
+              '🏛️ Hak Keamanan: Berhak dilindungi dari ancaman digital',
+              '🏛️ Hak Pendidikan: Berhak mendapatkan edukasi literasi digital'
+            ]
+          },
+          {
+            subtitle: 'Tanggung Jawab Digital',
+            items: [
+              '📜 Menghormati Hak Cipta: Jangan pembajakan konten atau karya',
+              '📜 Menjaga Etika: Berperilaku sopan dan bertanggung jawab online',
+              '📜 Tidak Menyebarkan Hoax: Verifikasi sebelum membagikan',
+              '📜 Melindungi Data Orang Lain: Hormati privasi sesama pengguna',
+              '📜 Mematuhi Hukum: Taat pada peraturan cybercrime dan privasi'
+            ]
+          },
+          {
+            subtitle: 'Regulasi & Undang-Undang',
+            items: [
+              '⚖️ UU ITE (Informasi dan Transaksi Elektronik)',
+              '⚖️ UU PDP (Perlindungan Data Pribadi)',
+              '⚖️ GDPR (General Data Protection Regulation - Eropa)',
+              '⚖️ CCPA (California Consumer Privacy Act - USA)'
+            ]
+          }
+        ]
+      }
+    };
+
+    // Materi Data dengan Area Tingkat
+    const materiData = {
+      pengertian: {
+        title: 'Pengertian Kecerdasan Digital',
+        icon: '💡',
+        color: 'from-blue-500 to-cyan-500',
+        slides: [
+          {
+            title: 'Apa itu Kecerdasan Digital?',
+            content: `<div class="space-y-6">
+              <div class="infographic-card p-6 rounded-2xl">
+                <div class="flex items-center gap-4 mb-4">
+                  <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-3xl floating">🧠</div>
+                  <div>
+                    <h3 class="text-xl font-bold text-blue-400">Digital Intelligence (DQ)</h3>
+                    <p class="text-gray-400">Kompetensi Abad 21</p>
+                  </div>
+                </div>
+                <p class="text-gray-300 leading-relaxed">Kecerdasan Digital adalah <span class="text-blue-400 font-semibold">sekumpulan kemampuan sosial, emosional, dan kognitif</span> yang memungkinkan individu menghadapi tantangan dan beradaptasi dengan tuntutan kehidupan digital.</p>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-gradient-to-br from-blue-600/20 to-blue-800/20 p-4 rounded-xl border border-blue-500/30">
+                  <div class="text-3xl mb-2">🤝</div>
+                  <h4 class="font-semibold text-blue-400">Sosial</h4>
+                  <p class="text-sm text-gray-400">Kemampuan berinteraksi secara positif di dunia digital</p>
+                </div>
+                <div class="bg-gradient-to-br from-purple-600/20 to-purple-800/20 p-4 rounded-xl border border-purple-500/30">
+                  <div class="text-3xl mb-2">❤️</div>
+                  <h4 class="font-semibold text-purple-400">Emosional</h4>
+                  <p class="text-sm text-gray-400">Mengelola emosi dalam interaksi online</p>
+                </div>
+                <div class="bg-gradient-to-br from-cyan-600/20 to-cyan-800/20 p-4 rounded-xl border border-cyan-500/30">
+                  <div class="text-3xl mb-2">🎯</div>
+                  <h4 class="font-semibold text-cyan-400">Kognitif</h4>
+                  <p class="text-sm text-gray-400">Berpikir kritis terhadap informasi digital</p>
+                </div>
+              </div>
+            </div>`
+          },
+          {
+            title: 'Mengapa Kecerdasan Digital Penting?',
+            content: `<div class="space-y-6">
+              <div class="relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl blur-xl"></div>
+                <div class="relative infographic-card p-6 rounded-2xl">
+                  <h3 class="text-xl font-bold text-center mb-6 text-gradient">Era Digital = Era Kecerdasan Digital</h3>
+                  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="text-center p-4">
+                      <div class="text-4xl mb-2">📱</div>
+                      <div class="text-2xl font-bold text-blue-400">5.3B</div>
+                      <div class="text-xs text-gray-400">Pengguna Internet Global</div>
+                    </div>
+                    <div class="text-center p-4">
+                      <div class="text-4xl mb-2">⏰</div>
+                      <div class="text-2xl font-bold text-purple-400">7 Jam</div>
+                      <div class="text-xs text-gray-400">Rata-rata Online/Hari</div>
+                    </div>
+                    <div class="text-center p-4">
+                      <div class="text-4xl mb-2">🎓</div>
+                      <div class="text-2xl font-bold text-cyan-400">90%</div>
+                      <div class="text-xs text-gray-400">Pekerjaan Butuh Skill Digital</div>
+                    </div>
+                    <div class="text-center p-4">
+                      <div class="text-4xl mb-2">⚠️</div>
+                      <div class="text-2xl font-bold text-red-400">800K</div>
+                      <div class="text-xs text-gray-400">Kasus Cybercrime/Tahun</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-gradient-to-r from-amber-500/20 to-orange-500/20 p-4 rounded-xl border border-amber-500/30">
+                <div class="flex items-center gap-3">
+                  <span class="text-3xl">💡</span>
+                  <p class="text-amber-200">Kecerdasan Digital bukan hanya tentang menggunakan teknologi, tetapi tentang bagaimana menjadi <strong>warga digital yang bertanggung jawab</strong>.</p>
+                </div>
+              </div>
+            </div>`
+          },
+          {
+            title: 'Komponen Kecerdasan Digital',
+            content: `<div class="space-y-4">
+              <div class="text-center mb-6">
+                <span class="inline-block px-4 py-2 bg-blue-500/20 rounded-full text-blue-400 text-sm font-medium">8 Area Kompetensi Digital</span>
+              </div>
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div class="infographic-card p-4 rounded-xl text-center card-hover cursor-pointer" onclick="showAreaKompetensi()">
+                  <div class="text-3xl mb-2">🆔</div>
+                  <h4 class="font-medium text-sm">8 Area Kompetensi</h4>
+                </div>
+                <div class="infographic-card p-4 rounded-xl text-center card-hover cursor-pointer" onclick="showAreaDetail('penggunaan')">
+                  <div class="text-3xl mb-2">⚖️</div>
+                  <h4 class="font-medium text-sm">Penggunaan Digital</h4>
+                </div>
+                <div class="infographic-card p-4 rounded-xl text-center card-hover cursor-pointer" onclick="showAreaDetail('keamanan')">
+                  <div class="text-3xl mb-2">🛡️</div>
+                  <h4 class="font-medium text-sm">Keamanan Digital</h4>
+                </div>
+                <div class="infographic-card p-4 rounded-xl text-center card-hover cursor-pointer" onclick="showAreaDetail('keselamatan')">
+                  <div class="text-3xl mb-2">🦺</div>
+                  <h4 class="font-medium text-sm">Keselamatan Digital</h4>
+                </div>
+                <div class="infographic-card p-4 rounded-xl text-center card-hover cursor-pointer" onclick="showAreaDetail('emosional')">
+                  <div class="text-3xl mb-2">💝</div>
+                  <h4 class="font-medium text-sm">Kecerdasan Emosional</h4>
+                </div>
+                <div class="infographic-card p-4 rounded-xl text-center card-hover cursor-pointer" onclick="showAreaDetail('komunikasi')">
+                  <div class="text-3xl mb-2">💬</div>
+                  <h4 class="font-medium text-sm">Komunikasi Digital</h4>
+                </div>
+                <div class="infographic-card p-4 rounded-xl text-center card-hover cursor-pointer" onclick="showAreaDetail('literasi')">
+                  <div class="text-3xl mb-2">📚</div>
+                  <h4 class="font-medium text-sm">Literasi Digital</h4>
+                </div>
+                <div class="infographic-card p-4 rounded-xl text-center card-hover cursor-pointer" onclick="showAreaDetail('hak')">
+                  <div class="text-3xl mb-2">⚖️</div>
+                  <h4 class="font-medium text-sm">Hak Digital</h4>
+                </div>
+              </div>
+              <div class="mt-4 p-4 bg-green-500/10 rounded-xl border border-green-500/30">
+                <p class="text-green-300 text-center text-sm">Klik pada setiap area untuk mempelajari detail lengkap!</p>
+              </div>
+            </div>`
+          }
+        ],
+        quiz: [
+          {
+            question: 'Kecerdasan Digital mencakup kemampuan...',
+            options: ['Hanya kemampuan teknis', 'Sosial, emosional, dan kognitif', 'Hanya kemampuan kognitif', 'Hanya kemampuan sosial'],
+            correct: 1
+          },
+          {
+            question: 'Berapa perkiraan jumlah pengguna internet global saat ini?',
+            options: ['1 miliar', '3 miliar', '5 miliar lebih', '10 miliar'],
+            correct: 2
+          },
+          {
+            question: 'Ada berapa area kompetensi dalam Kecerdasan Digital?',
+            options: ['5 area', '6 area', '8 area', '10 area'],
+            correct: 2
+          }
+        ]
+      },
+      area: {
+        title: 'Area & Tingkat Kecerdasan Digital',
+        icon: '📊',
+        color: 'from-purple-500 to-pink-500',
+        slides: [
+          {
+            title: 'Tingkat Kecerdasan Digital',
+            content: `<div class="space-y-6">
+              <div class="text-center mb-6">
+                <h3 class="text-2xl font-bold text-gradient mb-2">DQ Level Framework</h3>
+                <p class="text-gray-400">Dari Pemula hingga Expert</p>
+              </div>
+
+              <div class="space-y-4">
+                <div class="infographic-card p-4 rounded-xl">
+                  <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center text-2xl">🔴</div>
+                    <div class="flex-1">
+                      <h4 class="font-bold text-red-400">Level 1: Risky (Berisiko)</h4>
+                      <p class="text-sm text-gray-400">Pengguna digital tanpa kontrol, rentan terhadap risiko cyber</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="infographic-card p-4 rounded-xl">
+                  <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center text-2xl">🟠</div>
+                    <div class="flex-1">
+                      <h4 class="font-bold text-orange-400">Level 2: Aware (Sadar)</h4>
+                      <p class="text-sm text-gray-400">Mulai menyadari risiko digital namun masih perlu pengembangan</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="infographic-card p-4 rounded-xl">
+                  <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center text-2xl">🟡</div>
+                    <div class="flex-1">
+                      <h4 class="font-bold text-yellow-400">Level 3: Proficient (Kompeten)</h4>
+                      <p class="text-sm text-gray-400">Dapat menggunakan teknologi dengan bijak dan aman</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="infographic-card p-4 rounded-xl">
+                  <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center text-2xl">🟢</div>
+                    <div class="flex-1">
+                      <h4 class="font-bold text-green-400">Level 4: Expert (Ahli)</h4>
+                      <p class="text-sm text-gray-400">Master dalam kecerdasan digital, dapat membimbing orang lain</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-blue-500/10 p-6 rounded-xl border border-blue-500/30 mt-6">
+                <h4 class="font-bold text-blue-400 mb-3">📈 Cara Meningkatkan Level:</h4>
+                <ul class="space-y-2 text-sm text-gray-300">
+                  <li>✓ Terus belajar tentang kecerdasan digital</li>
+                  <li>✓ Praktikkan penggunaan teknologi yang aman</li>
+                  <li>✓ Ikuti edukasi dan pelatihan reguler</li>
+                  <li>✓ Bagikan pengetahuan kepada orang lain</li>
+                  <li>✓ Monitor dan evaluasi perkembangan Anda</li>
+                </ul>
+              </div>
+            </div>`
+          }
+        ],
+        quiz: [
+          {
+            question: 'Level kecerdasan digital tertinggi adalah...',
+            options: ['Aware', 'Proficient', 'Expert', 'Master'],
+            correct: 2
+          },
+          {
+            question: 'Pengguna di level "Risky" adalah...',
+            options: ['Sudah ahli', 'Tanpa kontrol dan rentan risiko', 'Kompeten', 'Sedang belajar'],
+            correct: 1
+          }
+        ]
+      },
+      kewarganegaraan: {
+        title: 'Kewarganegaraan Digital',
+        icon: '🌐',
+        color: 'from-teal-500 to-emerald-500',
+        slides: [
+          {
+            title: 'Pengertian Kewarganegaraan Digital',
+            content: `<div class="space-y-6">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center text-4xl pulse-glow">🌐</div>
+                <div>
+                  <h3 class="text-2xl font-bold">Kewarganegaraan Digital</h3>
+                  <p class="text-gray-400">Menjadi warga negara yang baik di dunia maya</p>
+                </div>
+              </div>
+              <div class="infographic-card p-6 rounded-2xl">
+                <h4 class="font-semibold text-lg mb-4 text-teal-400">Definisi</h4>
+                <p class="text-gray-300 leading-relaxed mb-6">Kewarganegaraan digital adalah status dan tanggung jawab seseorang sebagai anggota komunitas online global yang berkomitmen untuk berperilaku etis, menghormati hak orang lain, dan berkontribusi secara positif dalam ekosistem digital.</p>
+                
+                <h4 class="font-semibold text-lg mb-4 text-teal-400">Elemen Kunci</h4>
+                <ul class="space-y-3">
+                  <li class="flex items-start gap-3">
+                    <span class="text-teal-400 font-bold mt-1">→</span>
+                    <div>
+                      <span class="font-medium text-blue-400">Hak Digital:</span>
+                      <p class="text-sm text-gray-400">Berhak mengakses internet, privacy, berekspresi, dan keamanan</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-teal-400 font-bold mt-1">→</span>
+                    <div>
+                      <span class="font-medium text-blue-400">Tanggung Jawab:</span>
+                      <p class="text-sm text-gray-400">Menjaga perilaku, menghormati orang lain, mematuhi hukum</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-teal-400 font-bold mt-1">→</span>
+                    <div>
+                      <span class="font-medium text-blue-400">Partisipasi:</span>
+                      <p class="text-sm text-gray-400">Aktif berkontribusi pada komunitas online yang sehat</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>`
+          },
+          {
+            title: 'Ciri Warga Digital yang Baik',
+            content: `<div class="space-y-6">
+              <div class="text-center mb-4">
+                <span class="inline-block px-4 py-2 bg-teal-500/20 rounded-full text-teal-400 text-sm font-medium">6 Pilar Kewarganegaraan Digital</span>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="infographic-card p-4 rounded-xl">
+                  <div class="flex items-center gap-3 mb-3">
+                    <div class="text-3xl">🤝</div>
+                    <h4 class="font-bold text-teal-400">Bertanggung Jawab</h4>
+                  </div>
+                  <p class="text-sm text-gray-300">Mempertanggungjawabkan setiap tindakan dan konten yang dibagikan online</p>
+                </div>
+                <div class="infographic-card p-4 rounded-xl">
+                  <div class="flex items-center gap-3 mb-3">
+                    <div class="text-3xl">⚖️</div>
+                    <h4 class="font-bold text-emerald-400">Adil & Menghormati</h4>
+                  </div>
+                  <p class="text-sm text-gray-300">Menghormati hak dan privasi orang lain di dunia digital</p>
+                </div>
+                <div class="infographic-card p-4 rounded-xl">
+                  <div class="flex items-center gap-3 mb-3">
+                    <div class="text-3xl">🤲</div>
+                    <h4 class="font-bold text-green-400">Peduli & Empati</h4>
+                  </div>
+                  <p class="text-sm text-gray-300">Peduli dengan sesama pengguna internet dan mampu menunjukkan empati</p>
+                </div>
+                <div class="infographic-card p-4 rounded-xl">
+                  <div class="flex items-center gap-3 mb-3">
+                    <div class="text-3xl">🎯</div>
+                    <h4 class="font-bold text-cyan-400">Kritis & Bijak</h4>
+                  </div>
+                  <p class="text-sm text-gray-300">Berpikir kritis sebelum menerima atau membagikan informasi</p>
+                </div>
+                <div class="infographic-card p-4 rounded-xl">
+                  <div class="flex items-center gap-3 mb-3">
+                    <div class="text-3xl">🛡️</div>
+                    <h4 class="font-bold text-blue-400">Aman & Melindungi</h4>
+                  </div>
+                  <p class="text-sm text-gray-300">Menjaga keamanan diri dan membantu melindungi orang lain dari ancaman</p>
+                </div>
+                <div class="infographic-card p-4 rounded-xl">
+                  <div class="flex items-center gap-3 mb-3">
+                    <div class="text-3xl">✨</div>
+                    <h4 class="font-bold text-indigo-400">Positif & Konstruktif</h4>
+                  </div>
+                  <p class="text-sm text-gray-300">Menyebarkan pesan positif dan berkontribusi pada lingkungan digital yang sehat</p>
+                </div>
+              </div>
+            </div>`
+          },
+          {
+            title: 'Hak dan Tanggung Jawab',
+            content: `<div class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h4 class="font-bold text-lg text-green-400 mb-4">✅ HAK DIGITAL</h4>
+                  <div class="space-y-3">
+                    <div class="p-4 bg-green-500/10 rounded-lg border border-green-500/30">
+                      <h5 class="font-semibold text-green-400 mb-1">Hak Akses</h5>
+                      <p class="text-sm text-gray-400">Berhak mengakses internet dan informasi digital secara bebas</p>
+                    </div>
+                    <div class="p-4 bg-green-500/10 rounded-lg border border-green-500/30">
+                      <h5 class="font-semibold text-green-400 mb-1">Hak Privasi</h5>
+                      <p class="text-sm text-gray-400">Data pribadi dilindungi dan tidak boleh disalahgunakan</p>
+                    </div>
+                    <div class="p-4 bg-green-500/10 rounded-lg border border-green-500/30">
+                      <h5 class="font-semibold text-green-400 mb-1">Hak Berekspresi</h5>
+                      <p class="text-sm text-gray-400">Bebas menyatakan pendapat dengan etika dan tanggung jawab</p>
+                    </div>
+                    <div class="p-4 bg-green-500/10 rounded-lg border border-green-500/30">
+                      <h5 class="font-semibold text-green-400 mb-1">Hak Keamanan</h5>
+                      <p class="text-sm text-gray-400">Dilindungi dari ancaman cyber dan penyalahgunaan data</p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-bold text-lg text-orange-400 mb-4">📋 TANGGUNG JAWAB</h4>
+                  <div class="space-y-3">
+                    <div class="p-4 bg-orange-500/10 rounded-lg border border-orange-500/30">
+                      <h5 class="font-semibold text-orange-400 mb-1">Etika Berperilaku</h5>
+                      <p class="text-sm text-gray-400">Berperilaku sopan, menghormati orang lain, tidak merundung</p>
+                    </div>
+                    <div class="p-4 bg-orange-500/10 rounded-lg border border-orange-500/30">
+                      <h5 class="font-semibold text-orange-400 mb-1">Menjaga Privasi</h5>
+                      <p class="text-sm text-gray-400">Menghormati privasi orang lain, tidak menyebarkan data tanpa izin</p>
+                    </div>
+                    <div class="p-4 bg-orange-500/10 rounded-lg border border-orange-500/30">
+                      <h5 class="font-semibold text-orange-400 mb-1">Verifikasi Informasi</h5>
+                      <p class="text-sm text-gray-400">Cek kebenaran sebelum membagikan, hindari penyebaran hoax</p>
+                    </div>
+                    <div class="p-4 bg-orange-500/10 rounded-lg border border-orange-500/30">
+                      <h5 class="font-semibold text-orange-400 mb-1">Mematuhi Hukum</h5>
+                      <p class="text-sm text-gray-400">Taat pada UU ITE, UU PDP, dan regulasi cyber lainnya</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>`
+          },
+          {
+            title: 'Tantangan & Solusi',
+            content: `<div class="space-y-6">
+              <h4 class="font-bold text-lg text-red-400 mb-4">⚠️ ANCAMAN YANG DIHADAPI</h4>
+              <div class="space-y-3">
+                <div class="infographic-card p-4 rounded-lg">
+                  <div class="flex items-start gap-3">
+                    <span class="text-2xl">📱</span>
+                    <div>
+                      <h5 class="font-semibold text-red-400 mb-1">Penyalahgunaan Data</h5>
+                      <p class="text-sm text-gray-400">Data pribadi dijual, dicuri, atau digunakan untuk tujuan jahat</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="infographic-card p-4 rounded-lg">
+                  <div class="flex items-start gap-3">
+                    <span class="text-2xl">😈</span>
+                    <div>
+                      <h5 class="font-semibold text-red-400 mb-1">Cyberbullying & Hate Speech</h5>
+                      <p class="text-sm text-gray-400">Perundungan, ancaman, dan konten kebencian yang merugikan</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="infographic-card p-4 rounded-lg">
+                  <div class="flex items-start gap-3">
+                    <span class="text-2xl">🤥</span>
+                    <div>
+                      <h5 class="font-semibold text-red-400 mb-1">Misinformasi & Hoax</h5>
+                      <p class="text-sm text-gray-400">Penyebaran informasi palsu yang menyesatkan masyarakat</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <h4 class="font-bold text-lg text-green-400 mb-4 mt-6">💡 SOLUSI & CARA MENGATASI</h4>
+              <div class="space-y-2">
+                <div class="flex items-start gap-3 p-3 bg-green-500/10 rounded-lg">
+                  <span>✓</span>
+                  <span class="text-sm text-gray-300">Tingkatkan kesadaran digital dan edukasi berkelanjutan</span>
+                </div>
+                <div class="flex items-start gap-3 p-3 bg-green-500/10 rounded-lg">
+                  <span>✓</span>
+                  <span class="text-sm text-gray-300">Gunakan privasi dan keamanan terbaik untuk semua akun</span>
+                </div>
+                <div class="flex items-start gap-3 p-3 bg-green-500/10 rounded-lg">
+                  <span>✓</span>
+                  <span class="text-sm text-gray-300">Laporkan konten berbahaya ke pihak yang berwenang</span>
+                </div>
+                <div class="flex items-start gap-3 p-3 bg-green-500/10 rounded-lg">
+                  <span>✓</span>
+                  <span class="text-sm text-gray-300">Promosikan budaya netizen positif dan saling menghormati</span>
+                </div>
+              </div>
+            </div>`
+          }
+        ],
+        quiz: [
+          {
+            question: 'Apa pengertian kewarganegaraan digital?',
+            options: [
+              'Kemampuan bermain game online',
+              'Status dan tanggung jawab sebagai anggota komunitas online global',
+              'Lisensi untuk menggunakan internet',
+              'Sertifikat dari pemerintah'
+            ],
+            correct: 1
+          },
+          {
+            question: 'Salah satu hak digital yang fundamental adalah...',
+            options: [
+              'Bebas berbohong',
+              'Privasi dan perlindungan data',
+              'Boleh melecehkan orang lain',
+              'Bebas membajak konten'
+            ],
+            correct: 1
+          },
+          {
+            question: 'Tanggung jawab warga digital termasuk...',
+            options: [
+              'Menyebarkan hoax',
+              'Menjalankan cyberbullying',
+              'Mematuhi hukum dan peraturan cyber',
+              'Tidak menghormati privasi orang lain'
+            ],
+            correct: 2
+          },
+          {
+            question: 'Perilaku mana yang BUKAN ciri warga digital yang baik?',
+            options: [
+              'Menyebarkan berita palsu tanpa verifikasi',
+              'Menghormati pendapat berbeda',
+              'Berkomunikasi dengan sopan',
+              'Melindungi data pribadi'
+            ],
+            correct: 0
+          },
+          {
+            question: 'Ancaman kewarganegaraan digital yang paling serius adalah...',
+            options: [
+              'Koneksi internet lambat',
+              'Penyalahgunaan data dan cyberbullying',
+              'Baterai smartphone habis',
+              'File terlalu besar'
+            ],
+            correct: 1
+          },
+          {
+            question: 'Cara terbaik mengatasi misinformasi adalah...',
+            options: [
+              'Langsung membagikan ke semua orang',
+              'Verifikasi dari multiple sumber sebelum membagikan',
+              'Mengabaikan saja',
+              'Menyebarkan counter hoax'
+            ],
+            correct: 1
+          }
+        ]
+      }
+    };
+
+    // Games Data
+    const gamesData = [
+      {
+        id: 'snake-game',
+        title: 'Digital Guardian Snake',
+        description: 'Mainkan snake sambil menjawab soal saat ular memakan makanan',
+        icon: '🐍',
+        color: 'from-green-500 to-lime-500'
+      },
+      {
+        id: 'true-false',
+        title: 'Benar atau Salah',
+        description: 'Tentukan apakah pernyataan tentang keamanan digital benar atau salah',
+        icon: '✅',
+        color: 'from-green-500 to-emerald-500'
+      },
+      {
+        id: 'tower-game',
+        title: 'Digital Tower Defense',
+        description: 'Berdiri di atas tower dan jawab soal, jangan sampai jatuh!',
+        icon: '🏢',
+        color: 'from-yellow-500 to-orange-500'
+      },
+      {
+        id: 'cybersecurity',
+        title: 'Cybersecurity Defender',
+        description: 'Tangkap ancaman cyber sebelum menyerang sistem Anda',
+        icon: '🛡️',
+        color: 'from-red-500 to-pink-500'
+      }
+    ];
+
+    // Post Test Questions
+    const postTestQuestions = [
+      { question: 'Kecerdasan Digital mencakup kemampuan...', options: ['Hanya teknis', 'Sosial, emosional, dan kognitif', 'Hanya bermain game', 'Hanya media sosial'], correct: 1 },
+      { question: 'Apa yang dimaksud dengan identitas digital?', options: ['Kartu identitas fisik', 'Representasi diri di dunia maya', 'Password akun', 'Nomor telepon'], correct: 1 },
+      { question: 'Two-Factor Authentication (2FA) berfungsi untuk...', options: ['Login lebih cepat', 'Menambah keamanan akun', 'Menghapus password', 'Membuat akun baru'], correct: 1 },
+      { question: 'Apa tanda utama sebuah berita hoax?', options: ['Dari sumber terpercaya', 'Judul sensasional dan sumber tidak jelas', 'Ada tanggal publikasi', 'Ditulis dengan baik'], correct: 1 },
+      { question: 'Jejak digital bersifat...', options: ['Sementara', 'Bisa dihapus dengan mudah', 'Permanen', 'Tidak penting'], correct: 2 },
+      { question: 'Empati digital berarti...', options: ['Tidak peduli perasaan orang online', 'Memahami dan menghargai perasaan orang di dunia maya', 'Selalu setuju dengan semua orang', 'Tidak berkomentar sama sekali'], correct: 1 },
+      { question: 'Berapa jumlah maksimal screen time yang direkomendasikan untuk remaja?', options: ['10 jam', '2-4 jam', 'Tidak terbatas', '30 menit'], correct: 1 },
+      { question: 'Apa singkatan dari framework cek fakta SIFT?', options: ['Search, Identify, Find, Tell', 'Stop, Investigate, Find, Trace', 'Share, Ignore, Forward, Trust', 'See, Inform, Follow, Trust'], correct: 1 },
+      { question: 'Data pribadi yang harus dilindungi secara online termasuk...', options: ['Hobi', 'Alamat rumah dan nomor telepon', 'Warna favorit', 'Genre musik kesukaan'], correct: 1 },
+      { question: 'Cyberbullying adalah...', options: ['Bermain game online', 'Perundungan melalui media digital', 'Berbagi foto', 'Chatting dengan teman'], correct: 1 }
+    ];
+
+    // Data SDK Handler
+    const dataHandler = {
+      onDataChanged(data) {
+        studentScores = data;
+        if (currentPage === 'scores') {
+          renderScoresPage();
+        }
+      }
+    };
+
+    // Initialize Element SDK
+    async function initElementSdk() {
+      if (window.elementSdk) {
+        await window.elementSdk.init({
+          defaultConfig,
+          onConfigChange: async (newConfig) => {
+            config = { ...newConfig };
+            updateUI();
+          },
+          mapToCapabilities: (cfg) => ({
+            recolorables: [],
+            borderables: [],
+            fontEditable: undefined,
+            fontSizeable: undefined
+          }),
+          mapToEditPanelValues: (cfg) => new Map([
+            ['app_title', cfg.app_title || defaultConfig.app_title]
+          ])
+        });
+        config = { ...window.elementSdk.config };
+      }
+    }
+
+    // Initialize Data SDK
+    async function initDataSdk() {
+      if (window.dataSdk) {
+        const result = await window.dataSdk.init(dataHandler);
+        if (!result.isOk) {
+          console.error('Failed to initialize Data SDK');
+        }
+      }
+    }
+
+    // Update UI
+    function updateUI() {
+      const titleEl = document.getElementById('app-title');
+      if (titleEl) {
+        titleEl.textContent = config.app_title || defaultConfig.app_title;
+      }
+    }
+
+    // Show Area Detail Page
+    function showAreaDetail(areaKey) {
+      const area = areaDetails[areaKey];
+      if (!area) return;
+
+      currentPage = 'area-detail';
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = `
+        <div class="max-w-4xl mx-auto fade-in">
+          <div class="flex items-center justify-between mb-6">
+            <button onclick="showAreaKompetensi()" class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+              <span>←</span> Kembali ke Area Kompetensi
+            </button>
+          </div>
+
+          <div class="infographic-card rounded-2xl p-6 md:p-8 mb-6">
+            <h1 class="text-3xl md:text-4xl font-bold mb-2">${area.title}</h1>
+          </div>
+
+          <div class="space-y-6">
+            ${area.sections.map((section, idx) => `
+              <div class="infographic-card rounded-2xl p-6">
+                <h2 class="text-2xl font-bold mb-4 text-blue-400">${section.subtitle}</h2>
+                ${section.content ? `
+                  <p class="text-gray-300 leading-relaxed mb-4">${section.content}</p>
+                ` : ''}
+                ${section.items ? `
+                  <ul class="space-y-2">
+                    ${section.items.map(item => `
+                      <li class="flex items-start gap-3 p-3 bg-slate-800/50 rounded-lg">
+                        <span class="flex-shrink-0 mt-1">→</span>
+                        <span class="text-gray-300">${item}</span>
+                      </li>
+                    `).join('')}
+                  </ul>
+                ` : ''}
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="mt-8 text-center">
+            <button onclick="showAreaKompetensi()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all font-medium">
+              Kembali ke Area Kompetensi
+            </button>
+          </div>
+        </div>
+      `;
+      window.scrollTo(0, 0);
+    }
+
+    // Show Area Kompetensi Page
+    function showAreaKompetensi() {
+      currentPage = 'area-kompetensi';
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = `
+        <div class="max-w-6xl mx-auto fade-in">
+          <div class="flex items-center justify-between mb-6">
+            <button onclick="showPage('home')" class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+              <span>←</span> Kembali ke Beranda
+            </button>
+          </div>
+
+          <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold mb-4">
+              <span class="text-gradient">8 Area Kompetensi Digital</span>
+            </h1>
+            <p class="text-gray-400 max-w-2xl mx-auto">
+              Klik setiap area untuk mempelajari detail lengkap tentang Kecerdasan Digital
+            </p>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="infographic-card p-6 rounded-2xl text-center card-hover cursor-pointer" onclick="showAreaDetail('identitas')">
+              <div class="text-4xl mb-3">🆔</div>
+              <h4 class="font-bold text-sm md:text-base">Identitas Digital</h4>
+              <p class="text-xs text-gray-400 mt-2">Representasi diri di dunia maya</p>
+            </div>
+            <div class="infographic-card p-6 rounded-2xl text-center card-hover cursor-pointer" onclick="showAreaDetail('penggunaan')">
+              <div class="text-4xl mb-3">⚖️</div>
+              <h4 class="font-bold text-sm md:text-base">Penggunaan Digital</h4>
+              <p class="text-xs text-gray-400 mt-2">Keseimbangan waktu online</p>
+            </div>
+            <div class="infographic-card p-6 rounded-2xl text-center card-hover cursor-pointer" onclick="showAreaDetail('keamanan')">
+              <div class="text-4xl mb-3">🛡️</div>
+              <h4 class="font-bold text-sm md:text-base">Keamanan Digital</h4>
+              <p class="text-xs text-gray-400 mt-2">Melindungi data pribadi</p>
+            </div>
+            <div class="infographic-card p-6 rounded-2xl text-center card-hover cursor-pointer" onclick="showAreaDetail('keselamatan')">
+              <div class="text-4xl mb-3">🦺</div>
+              <h4 class="font-bold text-sm md:text-base">Keselamatan Digital</h4>
+              <p class="text-xs text-gray-400 mt-2">Menghindari bahaya online</p>
+            </div>
+            <div class="infographic-card p-6 rounded-2xl text-center card-hover cursor-pointer" onclick="showAreaDetail('emosional')">
+              <div class="text-4xl mb-3">💝</div>
+              <h4 class="font-bold text-sm md:text-base">Kecerdasan Emosional</h4>
+              <p class="text-xs text-gray-400 mt-2">Mengelola emosi online</p>
+            </div>
+            <div class="infographic-card p-6 rounded-2xl text-center card-hover cursor-pointer" onclick="showAreaDetail('komunikasi')">
+              <div class="text-4xl mb-3">💬</div>
+              <h4 class="font-bold text-sm md:text-base">Komunikasi Digital</h4>
+              <p class="text-xs text-gray-400 mt-2">Etika berkomunikasi online</p>
+            </div>
+            <div class="infographic-card p-6 rounded-2xl text-center card-hover cursor-pointer" onclick="showAreaDetail('literasi')">
+              <div class="text-4xl mb-3">📚</div>
+              <h4 class="font-bold text-sm md:text-base">Literasi Digital</h4>
+              <p class="text-xs text-gray-400 mt-2">Memahami informasi digital</p>
+            </div>
+            <div class="infographic-card p-6 rounded-2xl text-center card-hover cursor-pointer" onclick="showAreaDetail('hak')">
+              <div class="text-4xl mb-3">⚖️</div>
+              <h4 class="font-bold text-sm md:text-base">Hak Digital</h4>
+              <p class="text-xs text-gray-400 mt-2">Hak & tanggung jawab</p>
+            </div>
+          </div>
+        </div>
+      `;
+      window.scrollTo(0, 0);
+    }
+
+    // Navigation
+    function showPage(page, data = null) {
+      currentPage = page;
+      currentSlide = 0;
+      quizAnswered = false;
+      
+      const mainContent = document.getElementById('main-content');
+      
+      switch(page) {
+        case 'home':
+          renderHomePage();
+          break;
+        case 'materi':
+          renderMateriPage(data);
+          break;
+        case 'games':
+          renderGamesPage();
+          break;
+        case 'game':
+          renderGamePage(data);
+          break;
+        case 'posttest':
+          renderPostTestPage();
+          break;
+        case 'scores':
+          renderScoresPage();
+          break;
+        default:
+          renderHomePage();
+      }
+      
+      window.scrollTo(0, 0);
+    }
+
+    // Render Home Page
+    function renderHomePage() {
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = `
+        <div class="max-w-6xl mx-auto fade-in">
+          <!-- Hero Section -->
+          <div class="text-center mb-12">
+            <div class="inline-block mb-6">
+              <div class="w-24 h-24 mx-auto rounded-3xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-5xl floating glow-effect">
+                🧠
+              </div>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">
+              <span class="text-gradient">Kecerdasan Digital</span>
+            </h1>
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+              Media Pembelajaran Interaktif untuk Menjadi Warga Digital yang Cerdas dan Bertanggung Jawab
+            </p><br>
+			<p class="text-xl text-gray-400 max-w-2xl mx-auto">
+              by Ibnu Syifa
+            </p>
+          </div>
+
+          <!-- Materi Cards -->
+          <div class="mb-12">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+              <span class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">📚</span>
+              Pilih Materi Pembelajaran
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              ${Object.entries(materiData).map(([key, materi]) => `
+                <div class="infographic-card rounded-2xl overflow-hidden card-hover cursor-pointer" onclick="showPage('materi', '${key}')">
+                  <div class="h-2 bg-gradient-to-r ${materi.color}"></div>
+                  <div class="p-6">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br ${materi.color} flex items-center justify-center text-3xl mb-4">
+                      ${materi.icon}
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">${materi.title}</h3>
+                    <p class="text-gray-400 text-sm mb-4">${materi.slides.length} slide pembelajaran + ${materi.quiz.length} soal latihan</p>
+                    <div class="flex items-center text-blue-400 text-sm font-medium">
+                      Mulai Belajar <span class="ml-2">→</span>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Quick Access -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="infographic-card p-6 rounded-2xl card-hover cursor-pointer" onclick="showPage('games')">
+              <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-2xl">
+                  🎮
+                </div>
+                <div>
+                  <h3 class="font-bold">Game Edukatif</h3>
+                  <p class="text-sm text-gray-400">Belajar sambil bermain</p>
+                </div>
+              </div>
+            </div>
+            <div class="infographic-card p-6 rounded-2xl card-hover cursor-pointer" onclick="showPage('posttest')">
+              <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-2xl">
+                  📝
+                </div>
+                <div>
+                  <h3 class="font-bold">Post Test</h3>
+                  <p class="text-sm text-gray-400">Uji pemahamanmu</p>
+                </div>
+              </div>
+            </div>
+            <div class="infographic-card p-6 rounded-2xl card-hover cursor-pointer" onclick="showPage('scores')">
+              <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-2xl">
+                  🏆
+                </div>
+                <div>
+                  <h3 class="font-bold">Papan Nilai</h3>
+                  <p class="text-sm text-gray-400">Lihat hasil post test</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Render Materi Page
+    function renderMateriPage(materiKey) {
+      const materi = materiData[materiKey];
+      if (!materi || materi.slides.length === 0) {
+        showPage('home');
+        return;
+      }
+
+      currentQuiz = materi.quiz;
+      const slide = materi.slides[currentSlide];
+      const isLastSlide = currentSlide === materi.slides.length - 1;
+
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = `
+        <div class="max-w-4xl mx-auto slide-in">
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-6">
+            <button onclick="showPage('home')" class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+              <span>←</span> Kembali
+            </button>
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-gray-400">Slide ${currentSlide + 1} / ${materi.slides.length}</span>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="h-2 bg-slate-700 rounded-full mb-8 overflow-hidden">
+            <div class="h-full progress-bar rounded-full transition-all duration-500" style="width: ${((currentSlide + 1) / materi.slides.length) * 100}%"></div>
+          </div>
+
+          <!-- Slide Content -->
+          <div class="infographic-card rounded-2xl p-6 md:p-8 mb-6">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-br ${materi.color} flex items-center justify-center text-2xl">
+                ${materi.icon}
+              </div>
+              <div>
+                <h2 class="text-xl md:text-2xl font-bold">${slide.title}</h2>
+                <p class="text-sm text-gray-400">${materi.title}</p>
+              </div>
+            </div>
+            <div class="slide-content">
+              ${slide.content}
+            </div>
+          </div>
+
+          <!-- Navigation -->
+          <div class="flex justify-between gap-4">
+            <button onclick="prevSlide('${materiKey}')" class="px-6 py-3 rounded-xl bg-slate-700 hover:bg-slate-600 transition-colors ${currentSlide === 0 ? 'opacity-50 cursor-not-allowed' : ''}" ${currentSlide === 0 ? 'disabled' : ''}>
+              ← Sebelumnya
+            </button>
+            ${isLastSlide && materi.quiz.length > 0 ? `
+              <button onclick="showQuiz('${materiKey}')" class="px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 transition-all font-medium">
+                📝 Latihan Soal
+              </button>
+            ` : `
+              <button onclick="nextSlide('${materiKey}')" class="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all font-medium">
+                Selanjutnya →
+              </button>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
+    function nextSlide(materiKey) {
+      const materi = materiData[materiKey];
+      if (currentSlide < materi.slides.length - 1) {
+        currentSlide++;
+        renderMateriPage(materiKey);
+      }
+    }
+
+    function prevSlide(materiKey) {
+      if (currentSlide > 0) {
+        currentSlide--;
+        renderMateriPage(materiKey);
+      }
+    }
+
+    // Show Quiz
+    let currentQuizIndex = 0;
+    let quizScore = 0;
+
+    function showQuiz(materiKey) {
+      const materi = materiData[materiKey];
+      currentQuizIndex = 0;
+      quizScore = 0;
+      quizAnswered = false;
+      renderQuizQuestion(materiKey);
+    }
+
+    function renderQuizQuestion(materiKey) {
+      const materi = materiData[materiKey];
+      const quiz = materi.quiz[currentQuizIndex];
+
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = `
+        <div class="max-w-2xl mx-auto slide-in">
+          <div class="flex items-center justify-between mb-6">
+            <button onclick="renderMateriPage('${materiKey}')" class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+              <span>←</span> Kembali ke Materi
+            </button>
+            <div class="px-4 py-2 bg-blue-500/20 rounded-full text-blue-400 text-sm">
+              Soal ${currentQuizIndex + 1} / ${materi.quiz.length}
+            </div>
+          </div>
+
+          <div class="infographic-card rounded-2xl p-6 md:p-8">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-2xl">
+                ❓
+              </div>
+              <h2 class="text-xl font-bold">Latihan Soal</h2>
+            </div>
+
+            <p class="text-lg mb-6">${quiz.question}</p>
+
+            <div id="quiz-options" class="space-y-3">
+              ${quiz.options.map((option, idx) => `
+                <button onclick="checkAnswer(${idx}, ${quiz.correct}, '${materiKey}')" class="quiz-option w-full p-4 text-left rounded-xl border border-slate-600 hover:border-blue-500 transition-all" data-index="${idx}">
+                  <span class="inline-block w-8 h-8 rounded-full bg-slate-700 text-center leading-8 mr-3">${String.fromCharCode(65 + idx)}</span>
+                  ${option}
+                </button>
+              `).join('')}
+            </div>
+
+            <div id="quiz-feedback" class="mt-6 hidden"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function checkAnswer(selected, correct, materiKey) {
+      if (quizAnswered) return;
+      quizAnswered = true;
+
+      const options = document.querySelectorAll('.quiz-option');
+      options.forEach((opt, idx) => {
+        opt.classList.remove('hover:border-blue-500');
+        if (idx === correct) {
+          opt.classList.add('correct');
+        } else if (idx === selected && idx !== correct) {
+          opt.classList.add('incorrect');
+        }
+      });
+
+      const isCorrect = selected === correct;
+      if (isCorrect) quizScore++;
+
+      const feedback = document.getElementById('quiz-feedback');
+      feedback.classList.remove('hidden');
+      feedback.innerHTML = `
+        <div class="p-4 rounded-xl ${isCorrect ? 'bg-green-500/20 border border-green-500/30' : 'bg-red-500/20 border border-red-500/30'}">
+          <p class="font-medium ${isCorrect ? 'text-green-400' : 'text-red-400'}">
+            ${isCorrect ? '✅ Benar!' : '❌ Salah!'}
+          </p>
+        </div>
+        <button onclick="nextQuizQuestion('${materiKey}')" class="mt-4 w-full px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all font-medium">
+          ${currentQuizIndex < materiData[materiKey].quiz.length - 1 ? 'Soal Berikutnya →' : 'Lihat Hasil'}
+        </button>
+      `;
+    }
+
+    function nextQuizQuestion(materiKey) {
+      const materi = materiData[materiKey];
+      if (currentQuizIndex < materi.quiz.length - 1) {
+        currentQuizIndex++;
+        quizAnswered = false;
+        renderQuizQuestion(materiKey);
+      } else {
+        showQuizResult(materiKey);
+      }
+    }
+
+    function showQuizResult(materiKey) {
+      const materi = materiData[materiKey];
+      const percentage = Math.round((quizScore / materi.quiz.length) * 100);
+      
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = `
+        <div class="max-w-2xl mx-auto text-center fade-in">
+          <div class="infographic-card rounded-2xl p-8">
+            <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br ${percentage >= 70 ? 'from-green-500 to-emerald-600' : 'from-orange-500 to-red-600'} flex items-center justify-center text-4xl mb-6">
+              ${percentage >= 70 ? '🎉' : '💪'}
+            </div>
+            <h2 class="text-3xl font-bold mb-2">Hasil Latihan</h2>
+            <p class="text-gray-400 mb-6">${materi.title}</p>
+            
+            <div class="text-6xl font-bold mb-2 ${percentage >= 70 ? 'text-green-400' : 'text-orange-400'}">
+              ${percentage}%
+            </div>
+            <p class="text-xl text-gray-300 mb-6">
+              ${quizScore} dari ${materi.quiz.length} soal benar
+            </p>
+
+            <div class="p-4 rounded-xl ${percentage >= 70 ? 'bg-green-500/10 border border-green-500/30' : 'bg-orange-500/10 border border-orange-500/30'} mb-6">
+              <p class="${percentage >= 70 ? 'text-green-300' : 'text-orange-300'}">
+                ${percentage >= 70 ? '🌟 Excellent! Kamu sudah memahami materi ini dengan baik!' : '📚 Tetap semangat! Coba pelajari materinya lagi ya!'}
+              </p>
+            </div>
+
+            <div class="flex gap-4 justify-center">
+              <button onclick="renderMateriPage('${materiKey}')" class="px-6 py-3 rounded-xl bg-slate-700 hover:bg-slate-600 transition-colors">
+                ← Ulangi Materi
+              </button>
+              <button onclick="showPage('home')" class="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all">
+                Beranda →
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Render Games Page
+    function renderGamesPage() {
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = `
+        <div class="max-w-4xl mx-auto fade-in">
+          <div class="text-center mb-8">
+            <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-4xl mb-4 floating">
+              🎮
+            </div>
+            <h1 class="text-3xl font-bold mb-2">Game Edukatif</h1>
+            <p class="text-gray-400">Pilih game untuk mempertajam kemampuan Kecerdasan Digitalmu!</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            ${gamesData.map(game => `
+              <div class="game-card rounded-2xl p-6 card-hover cursor-pointer" onclick="showPage('game', '${game.id}')">
+                <div class="flex items-start gap-4">
+                  <div class="w-16 h-16 rounded-2xl bg-gradient-to-br ${game.color} flex items-center justify-center text-3xl flex-shrink-0">
+                    ${game.icon}
+                  </div>
+                  <div>
+                    <h3 class="text-xl font-bold mb-2">${game.title}</h3>
+                    <p class="text-gray-400 text-sm">${game.description}</p>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="mt-8 text-center">
+            <button onclick="showPage('home')" class="px-6 py-3 rounded-xl bg-slate-700 hover:bg-slate-600 transition-colors">
+              ← Kembali ke Beranda
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Game Variables
+    let gameScore = 0;
+    let gameQuestionIndex = 0;
+    let gameQuestions = [];
+
+    // Render Game Page
+    function renderGamePage(gameId) {
+      gameScore = 0;
+      gameQuestionIndex = 0;
+      quizAnswered = false;
+
+      switch(gameId) {
+        case 'snake-game':
+          startSnakeGame();
+          break;
+        case 'true-false':
+          startTrueFalse();
+          break;
+        case 'tower-game':
+          startTowerGame();
+          break;
+        case 'cybersecurity':
+          startCybersecurityGame();
+          break;
+        default:
+          showPage('games');
+      }
+    }
+
+    // SNAKE GAME - IMPROVED
+    const snakeQuestions = [
+      { q: 'Berapa jumlah area kompetensi Kecerdasan Digital?', opts: ['5', '8', '10', '12'], ans: 1 },
+      { q: 'Password kuat minimal berapa karakter?', opts: ['8', '10', '12', '15'], ans: 2 },
+      { q: 'Apa singkatan 2FA?', opts: ['Two Factor Auth', 'Two Fast App', 'Two Finger Auth', 'Teknologi Factor App'], ans: 0 },
+      { q: 'Berapa screen time ideal untuk remaja?', opts: ['1-2 jam', '2-4 jam', '5-6 jam', 'Tidak terbatas'], ans: 1 },
+      { q: 'SIFT adalah framework untuk...', opts: ['Gaming', 'Cek fakta', 'Coding', 'Desain'], ans: 1 },
+      { q: 'Kecerdasan Digital mencakup aspek...', opts: ['Teknis saja', 'Sosial, emosional, kognitif', 'Hobi saja', 'Olahraga'], ans: 1 },
+      { q: 'Identitas digital adalah...', opts: ['Kartu ID fisik', 'Representasi diri di dunia maya', 'Nomor rekening', 'Password'], ans: 1 },
+      { q: 'Cyberbullying termasuk...', opts: ['Game online', 'Perundungan digital', 'Chating santai', 'Video call'], ans: 1 }
+    ];
+
+    let snakeGame = {
+      canvas: null,
+      ctx: null,
+      snake: [{x: 150, y: 150}],
+      food: {x: 300, y: 300},
+      direction: {x: 20, y: 0},
+      nextDirection: {x: 20, y: 0},
+      score: 0,
+      gameActive: true,
+      foodEaten: false,
+      currentQuestion: null,
+      questionShown: false
+    };
+
+    function startSnakeGame() {
+      gameScore = 0;
+      snakeGame = {
+        canvas: null,
+        ctx: null,
+        snake: [{x: 150, y: 150}],
+        food: {x: 300, y: 300},
+        direction: {x: 20, y: 0},
+        nextDirection: {x: 20, y: 0},
+        score: 0,
+        gameActive: true,
+        foodEaten: false,
+        currentQuestion: null,
+        questionShown: false
+      };
+
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = `
+        <div class="max-w-4xl mx-auto fade-in">
+          <div class="flex items-center justify-between mb-4">
+            <button onclick="showPage('games')" class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+              <span>←</span> Keluar
+            </button>
+            <div class="flex gap-4">
+              <div class="px-4 py-2 bg-green-500/20 rounded-full text-green-400 text-sm font-medium">
+                🐍 Panjang: ${snakeGame.snake.length}
+              </div>
+              <div class="px-4 py-2 bg-blue-500/20 rounded-full text-blue-400 text-sm font-medium">
+                ✅ Benar: <span id="snake-score">${gameScore}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-2">
+              <canvas id="gameCanvas" width="400" height="400" class="w-full border-2 border-green-500 rounded-lg"></canvas>
+            </div>
+            <div class="infographic-card rounded-2xl p-4">
+              <h3 class="font-bold mb-3">🎯 Cara Bermain:</h3>
+              <ul class="text-xs space-y-2 text-gray-300">
+                <li>✓ Gunakan Arrow Keys untuk bergerak</li>
+                <li>✓ Makan 🍎 untuk mendapat soal</li>
+                <li>✓ Jawab soal dengan benar</li>
+                <li>✓ Jangan menabrak dinding atau diri sendiri</li>
+              </ul>
+              <div id="snake-question" class="mt-4 pt-4 border-t border-slate-600"></div>
+            </div>
+          </div>
+
+          <div class="mt-4 p-4 bg-green-500/10 rounded-xl border border-green-500/30">
+            <p class="text-sm text-green-200">💡 Soal hanya muncul setelah ular memakan makanan!</p>
+          </div>
+        </div>
+      `;
+
+      setTimeout(() => {
+        snakeGame.canvas = document.getElementById('gameCanvas');
+        if (!snakeGame.canvas) return;
+        snakeGame.ctx = snakeGame.canvas.getContext('2d');
+        
+        document.addEventListener('keydown', handleSnakeKeydown);
+        snakeGameLoop();
+      }, 100);
+    }
+
+    function showSnakeQuestion() {
+      const q = snakeQuestions[Math.floor(Math.random() * snakeQuestions.length)];
+      snakeGame.currentQuestion = q;
+      snakeGame.questionShown = true;
+
+      const questionEl = document.getElementById('snake-question');
+      if (!questionEl) return;
+
+      questionEl.innerHTML = `
+        <p class="font-medium mb-3 text-blue-400">📝 ${q.q}</p>
+        <div class="space-y-2">
+          ${q.opts.map((opt, idx) => `
+            <button onclick="answerSnakeQuestion(${idx}, ${q.ans})" class="w-full p-2 rounded text-left text-xs bg-slate-700/50 border border-slate-600 hover:bg-slate-600 transition-colors">
+              <span class="font-bold">${String.fromCharCode(65+idx)})</span> ${opt}
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function answerSnakeQuestion(selected, correct) {
+      if (!snakeGame.currentQuestion || selected !== correct) return;
+      
+      gameScore++;
+      document.getElementById('snake-score').textContent = gameScore;
+      snakeGame.score += 10;
+      snakeGame.foodEaten = false;
+      snakeGame.currentQuestion = null;
+      snakeGame.questionShown = false;
+      
+      const questionEl = document.getElementById('snake-question');
+      if (questionEl) {
+        questionEl.innerHTML = `<p class="text-green-400 text-sm font-medium">✅ Jawaban benar! Lanjutkan bermain...</p>`;
+        setTimeout(() => {
+          if (questionEl.parentElement) {
+            questionEl.innerHTML = '';
+          }
+        }, 1500);
+      }
+    }
+
+    function handleSnakeKeydown(e) {
+      if (!snakeGame.gameActive) return;
+      
+      switch(e.key) {
+        case 'ArrowUp':
+          if (snakeGame.direction.y === 0) snakeGame.nextDirection = {x: 0, y: -20};
+          break;
+        case 'ArrowDown':
+          if (snakeGame.direction.y === 0) snakeGame.nextDirection = {x: 0, y: 20};
+          break;
+        case 'ArrowLeft':
+          if (snakeGame.direction.x === 0) snakeGame.nextDirection = {x: -20, y: 0};
+          break;
+        case 'ArrowRight':
+          if (snakeGame.direction.x === 0) snakeGame.nextDirection = {x: 20, y: 0};
+          break;
+      }
+    }
+
+    function snakeGameLoop() {
+      if (!snakeGame.gameActive) return;
+
+      snakeGame.direction = snakeGame.nextDirection;
+      
+      const head = {x: snakeGame.snake[0].x + snakeGame.direction.x, y: snakeGame.snake[0].y + snakeGame.direction.y};
+
+      if (head.x < 0 || head.x >= 400 || head.y < 0 || head.y >= 400 || snakeGame.snake.some(s => s.x === head.x && s.y === head.y)) {
+        finishSnakeGame();
+        return;
+      }
+
+      snakeGame.snake.unshift(head);
+
+      // Improved collision detection dengan tolerance
+      const foodCollision = Math.abs(head.x - snakeGame.food.x) < 15 && Math.abs(head.y - snakeGame.food.y) < 15;
+      
+      if (foodCollision) {
+        snakeGame.foodEaten = true;
+        if (!snakeGame.questionShown) {
+          showSnakeQuestion();
+        }
+        // Generate new food position
+        let newFood = {x: Math.floor(Math.random() * 20) * 20, y: Math.floor(Math.random() * 20) * 20};
+        while (snakeGame.snake.some(s => Math.abs(s.x - newFood.x) < 15 && Math.abs(s.y - newFood.y) < 15)) {
+          newFood = {x: Math.floor(Math.random() * 20) * 20, y: Math.floor(Math.random() * 20) * 20};
+        }
+        snakeGame.food = newFood;
+      } else {
+        snakeGame.snake.pop();
+      }
+
+      drawSnakeGame();
+      setTimeout(snakeGameLoop, 100);
+    }
+
+    function drawSnakeGame() {
+      // Background dengan grid
+      snakeGame.ctx.fillStyle = '#0f172a';
+      snakeGame.ctx.fillRect(0, 0, 400, 400);
+
+      // Grid pattern
+      snakeGame.ctx.strokeStyle = 'rgba(59, 130, 246, 0.1)';
+      snakeGame.ctx.lineWidth = 0.5;
+      for (let i = 0; i <= 20; i++) {
+        snakeGame.ctx.beginPath();
+        snakeGame.ctx.moveTo(i * 20, 0);
+        snakeGame.ctx.lineTo(i * 20, 400);
+        snakeGame.ctx.stroke();
+        snakeGame.ctx.beginPath();
+        snakeGame.ctx.moveTo(0, i * 20);
+        snakeGame.ctx.lineTo(400, i * 20);
+        snakeGame.ctx.stroke();
+      }
+
+      // Draw snake dengan efek 3D
+      snakeGame.snake.forEach((segment, idx) => {
+        if (idx === 0) {
+          // Head - lebih hijau terang
+          snakeGame.ctx.fillStyle = '#00ff00';
+          snakeGame.ctx.beginPath();
+          snakeGame.ctx.arc(segment.x + 10, segment.y + 10, 10, 0, Math.PI * 2);
+          snakeGame.ctx.fill();
+          
+          // Mata ular
+          snakeGame.ctx.fillStyle = '#000000';
+          const eyeX = segment.x + 10 + Math.cos(getHeadAngle()) * 5;
+          const eyeY = segment.y + 10 + Math.sin(getHeadAngle()) * 5;
+          snakeGame.ctx.beginPath();
+          snakeGame.ctx.arc(eyeX, eyeY, 2, 0, Math.PI * 2);
+          snakeGame.ctx.fill();
+        } else {
+          // Body - gradient hijau
+          const intensity = 1 - (idx / snakeGame.snake.length) * 0.5;
+          snakeGame.ctx.fillStyle = `rgba(34, 197, 94, ${intensity})`;
+          snakeGame.ctx.fillRect(segment.x + 2, segment.y + 2, 16, 16);
+        }
+      });
+
+      // Draw food (apple)
+      const foodX = snakeGame.food.x + 10;
+      const foodY = snakeGame.food.y + 10;
+      snakeGame.ctx.fillStyle = '#ef4444';
+      snakeGame.ctx.beginPath();
+      snakeGame.ctx.arc(foodX, foodY, 9, 0, Math.PI * 2);
+      snakeGame.ctx.fill();
+      
+      // Kilau pada apple
+      snakeGame.ctx.fillStyle = '#fca5a5';
+      snakeGame.ctx.beginPath();
+      snakeGame.ctx.arc(foodX - 3, foodY - 3, 3, 0, Math.PI * 2);
+      snakeGame.ctx.fill();
+      
+      // Tangkai apple
+      snakeGame.ctx.strokeStyle = '#92400e';
+      snakeGame.ctx.lineWidth = 2;
+      snakeGame.ctx.beginPath();
+      snakeGame.ctx.moveTo(foodX, foodY - 9);
+      snakeGame.ctx.lineTo(foodX, foodY - 13);
+      snakeGame.ctx.stroke();
+    }
+
+    function getHeadAngle() {
+      if (snakeGame.direction.x > 0) return 0;
+      if (snakeGame.direction.x < 0) return Math.PI;
+      if (snakeGame.direction.y > 0) return Math.PI / 2;
+      if (snakeGame.direction.y < 0) return -Math.PI / 2;
+      return 0;
+    }
+
+    function finishSnakeGame() {
+      snakeGame.gameActive = false;
+      document.removeEventListener('keydown', handleSnakeKeydown);
+      showSnakeGameResult();
+    }
+
+    function showSnakeGameResult() {
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = `
+        <div class="max-w-2xl mx-auto text-center fade-in">
+          <div class="infographic-card rounded-2xl p-8">
+            <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-4xl mb-6">
+              🐍
+            </div>
+            <h2 class="text-3xl font-bold mb-2">Game Selesai!</h2>
+            <p class="text-gray-400 mb-6">Digital Guardian Snake</p>
+            
+            <div class="grid grid-cols-2 gap-4 mb-6">
+              <div class="p-4 bg-green-500/10 rounded-xl">
+                <div class="text-3xl font-bold text-green-400">${snakeGame.snake.length - 1}</div>
+                <div class="text-sm text-gray-400">Panjang Ular</div>
+              </div>
+              <div class="p-4 bg-blue-500/10 rounded-xl">
+                <div class="text-3xl font-bold text-blue-400">${gameScore}</div>
+                <div class="text-sm text-gray-400">Jawaban Benar</div>
+              </div>
+            </div>
+
+            <div class="flex gap-4 justify-center">
+              <button onclick="showPage('games')" class="px-6 py-3 rounded-xl bg-slate-700 hover:bg-slate-600 transition-colors">
+                ← Game Lainnya
+              </button>
+              <button onclick="startSnakeGame()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 transition-all">
+                🔄 Main Lagi
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // TRUE FALSE GAME
+    const trueFalseQuestions = [
+      { statement: 'Password yang kuat minimal terdiri dari 12 karakter.', answer: true },
+      { statement: 'Two-Factor Authentication (2FA) tidak penting untuk keamanan akun.', answer: false },
+      { statement: 'Jejak digital bersifat permanen dan sulit dihapus.', answer: true },
+      { statement: 'Menulis dengan HURUF KAPITAL semua adalah etika yang baik di internet.', answer: false },
+      { statement: 'Empati digital berarti memahami perasaan orang lain di dunia maya.', answer: true },
+      { statement: 'Boleh menyebar informasi tanpa mengecek kebenarannya terlebih dahulu.', answer: false },
+      { statement: 'Cyberbullying adalah perundungan yang dilakukan melalui media digital.', answer: true },
+      { statement: 'Data pribadi seperti alamat rumah boleh dibagikan secara bebas di internet.', answer: false },
+      { statement: 'Framework SIFT dapat digunakan untuk mengecek kebenaran informasi.', answer: true },
+      { statement: 'Screen time untuk remaja sebaiknya dibatasi 2-4 jam per hari.', answer: true }
+    ];
+
+    function startTrueFalse() {
+      gameQuestions = [...trueFalseQuestions].sort(() => Math.random() - 0.5).slice(0, 10);
+      gameScore = 0;
+      gameQuestionIndex = 0;
+      renderTrueFalseQuestion();
+    }
+
+    function renderTrueFalseQuestion() {
+      if (gameQuestionIndex >= gameQuestions.length) {
+        showGameResult('Benar atau Salah');
+        return;
+      }
+
+      const q = gameQuestions[gameQuestionIndex];
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = `
+        <div class="max-w-2xl mx-auto slide-in">
+          <div class="flex items-center justify-between mb-6">
+            <button onclick="showPage('games')" class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+              <span>←</span> Keluar
+            </button>
+            <div class="flex items-center gap-4">
+              <div class="px-4 py-2 bg-green-500/20 rounded-full text-green-400 text-sm">
+                Skor: ${gameScore}
+              </div>
+              <div class="px-4 py-2 bg-blue-500/20 rounded-full text-blue-400 text-sm">
+                ${gameQuestionIndex + 1} / ${gameQuestions.length}
+              </div>
+            </div>
+          </div>
+
+          <div class="infographic-card rounded-2xl p-6 md:p-8">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-2xl">
+                ✅
+              </div>
+              <h2 class="text-xl font-bold">Benar atau Salah?</h2>
+            </div>
+
+            <div class="p-6 bg-slate-800/50 rounded-xl mb-6">
+              <p class="text-lg text-center">"${q.statement}"</p>
+            </div>
+
+            <div id="tf-options" class="grid grid-cols-2 gap-4">
+              <button onclick="checkTrueFalse(true, ${q.answer})" class="quiz-option p-6 rounded-xl border border-green-500/30 bg-green-500/10 hover:bg-green-500/20 transition-all text-center">
+                <div class="text-4xl mb-2">✅</div>
+                <div class="font-bold text-green-400">BENAR</div>
+              </button>
+              <button onclick="checkTrueFalse(false, ${q.answer})" class="quiz-option p-6 rounded-xl border border-red-500/30 bg-red-500/10 hover:bg-red-500/20 transition-all text-center">
+                <div class="text-4xl mb-2">❌</div>
+                <div class="font-bold text-red-400">SALAH</div>
+              </button>
+            </div>
+
+            <div id="tf-feedback" class="mt-6 hidden"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function checkTrueFalse(selected, correct) {
+      if (quizAnswered) return;
+      quizAnswered = true;
+
+      const isCorrect = selected === correct;
+      if (isCorrect) gameScore++;
+
+      const options = document.querySelectorAll('#tf-options button');
+      options.forEach(opt => {
+        opt.classList.add('cursor-not-allowed', 'opacity-50');
+      });
+
+      const feedback = document.getElementById('tf-feedback');
+      feedback.classList.remove('hidden');
+      feedback.innerHTML = `
+        <div class="p-4 rounded-xl ${isCorrect ? 'bg-green-500/20 border border-green-500/30' : 'bg-red-500/20 border border-red-500/30'}">
+          <p class="font-medium ${isCorrect ? 'text-green-400' : 'text-red-400'}">
+            ${isCorrect ? '✅ Benar!' : '❌ Salah!'} Jawabannya adalah: ${correct ? 'BENAR' : 'SALAH'}
+          </p>
+        </div>
+        <button onclick="nextTrueFalseQuestion()" class="mt-4 w-full px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all font-medium">
+          ${gameQuestionIndex < gameQuestions.length - 1 ? 'Lanjut →' : 'Lihat Hasil'}
+        </button>
+      `;
+    }
+
+    function nextTrueFalseQuestion() {
+      gameQuestionIndex++;
+      quizAnswered = false;
+      renderTrueFalseQuestion();
+    }
+
+    // TOWER GAME
+    const towerQuestions = [
+      { q: 'Ada berapa area Kecerdasan Digital?', opts: ['6', '8', '10', '12'], ans: 1 },
+      { q: 'Password kuat minimal punya...', opts: ['Huruf', 'Huruf + Angka', 'Huruf + Angka + Simbol', 'Huruf saja'], ans: 2 },
+      { q: 'Framework cek fakta adalah...', opts: ['SIFT', 'SWIFT', 'SHIFT', 'SOFT'], ans: 0 },
+      { q: 'Jejak digital bersifat...', opts: ['Sementara', 'Permanen', 'Dapat dihapus mudah', 'Tidak penting'], ans: 1 },
+      { q: 'Empati digital adalah...', opts: ['Bermain game', 'Memahami perasaan online', 'Mengunggah foto', 'Scroll media sosial'], ans: 1 }
+    ];
+
+    let towerGameState = {
+      height: 0,
+      gameActive: true,
+      score: 0,
+      currentQuestion: 0
+    };
+
+    function startTowerGame() {
+      gameScore = 0;
+      gameQuestionIndex = 0;
+      towerGameState = {
+        height: 0,
+        gameActive: true,
+        score: 0,
+        currentQuestion: 0
+      };
+      renderTowerGamePage();
+    }
+
+    function renderTowerGamePage() {
+      const mainContent = document.getElementById('main-content');
+      const q = towerQuestions[towerGameState.currentQuestion];
+
+      mainContent.innerHTML = `
+        <div class="max-w-2xl mx-auto fade-in">
+          <div class="flex items-center justify-between mb-6">
+            <button onclick="showPage('games')" class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+              <span>←</span> Keluar
+            </button>
+            <div class="flex gap-2">
+              <div class="px-3 py-2 bg-yellow-500/20 rounded-full text-yellow-400 text-xs font-medium">
+                🏢 Tinggi: ${towerGameState.height}
+              </div>
+              <div class="px-3 py-2 bg-blue-500/20 rounded-full text-blue-400 text-xs font-medium">
+                📝 ${towerGameState.currentQuestion + 1}/${towerQuestions.length}
+              </div>
+            </div>
+          </div>
+
+          <!-- Tower Visualization - Built from Bottom to Top -->
+          <div class="infographic-card rounded-2xl p-6 mb-6">
+            <div class="flex flex-col items-center justify-end mb-6 h-80">
+              <div class="flex flex-col-reverse gap-2 items-center">
+                ${Array.from({length: towerGameState.height}).map((_, i) => {
+                  const colorMap = i < 3 ? 'from-green-500 to-emerald-600' : i < 6 ? 'from-yellow-500 to-orange-600' : 'from-red-500 to-rose-600';
+                  return `<div class="w-24 h-8 rounded-md bg-gradient-to-r ${colorMap} shadow-lg tower-block safe"></div>`;
+                }).join('')}
+              </div>
+              <div class="w-32 h-4 rounded-full bg-slate-700 mt-4 border-2 border-yellow-500"></div>
+            </div>
+            <p class="text-center text-gray-400">Jawab benar untuk menambah tinggi menara dari bawah!</p>
+          </div>
+
+          <!-- Question -->
+          <div class="infographic-card rounded-2xl p-6 mb-6">
+            <h3 class="font-bold text-lg mb-4">${q.q}</h3>
+            <div class="space-y-2">
+              ${q.opts.map((opt, idx) => `
+                <button onclick="answerTowerQuestion(${idx}, ${q.ans})" class="w-full p-3 rounded-lg text-left bg-slate-700 hover:bg-slate-600 transition-all border border-slate-600">
+                  <span class="font-bold text-yellow-400 mr-2">${String.fromCharCode(65+idx)})</span> ${opt}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function answerTowerQuestion(selected, correct) {
+      if (!towerGameState.gameActive) return;
+
+      if (selected === correct) {
+        gameScore++;
+        towerGameState.height++;
+        towerGameState.score++;
+      } else {
+        towerGameState.gameActive = false;
+        finishTowerGame();
+        return;
+      }
+
+      if (towerGameState.currentQuestion < towerQuestions.length - 1) {
+        towerGameState.currentQuestion++;
+        renderTowerGamePage();
+      } else {
+        finishTowerGame();
+      }
+    }
+
+    function finishTowerGame() {
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = `
+        <div class="max-w-2xl mx-auto text-center fade-in">
+          <div class="infographic-card rounded-2xl p-8">
+            <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br ${towerGameState.height >= 4 ? 'from-yellow-500 to-orange-600' : 'from-red-500 to-rose-600'} flex items-center justify-center text-4xl mb-6">
+              ${towerGameState.height >= 4 ? '🏆' : '😅'}
+            </div>
+            <h2 class="text-3xl font-bold mb-2">Tower Runtuh!</h2>
+            <p class="text-gray-400 mb-6">Digital Tower Defense</p>
+            
+            <div class="grid grid-cols-2 gap-4 mb-6">
+              <div class="p-4 bg-yellow-500/10 rounded-xl">
+                <div class="text-4xl font-bold text-yellow-400">${towerGameState.height}</div>
+                <div class="text-sm text-gray-400">Tinggi Menara</div>
+              </div>
+              <div class="p-4 bg-blue-500/10 rounded-xl">
+                <div class="text-4xl font-bold text-blue-400">${gameScore}</div>
+                <div class="text-sm text-gray-400">Jawaban Benar</div>
+              </div>
+            </div>
+
+            <div class="flex gap-4 justify-center">
+              <button onclick="showPage('games')" class="px-6 py-3 rounded-xl bg-slate-700 hover:bg-slate-600 transition-colors">
+                ← Game Lainnya
+              </button>
+              <button onclick="startTowerGame()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 transition-all">
+                🔄 Main Lagi
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // CYBERSECURITY GAME - IMPROVED
+    const threats = [
+      { name: 'Phishing Email', icon: '📧', info: 'Email palsu untuk mencuri data' },
+      { name: 'Malware', icon: '🦠', info: 'Program berbahaya' },
+      { name: 'Password Lemah', icon: '🔓', info: 'Akun mudah diretas' },
+      { name: 'Cyberbully', icon: '😈', info: 'Perundungan digital' },
+      { name: 'Data Breach', icon: '🔓', info: 'Pembobolan data' },
+      { name: 'Fake News', icon: '📰', info: 'Berita palsu' }
+    ];
+
+    let cyberGameState = {
+      score: 0,
+      missed: 0,
+      gameActive: true,
+      threats: [],
+      level: 1,
+      baseSpeed: 5,
+      threatCount: 0
+    };
+
+    function startCybersecurityGame() {
+      gameScore = 0;
+      cyberGameState = {
+        score: 0,
+        missed: 0,
+        gameActive: true,
+        threats: [],
+        level: 1,
+        baseSpeed: 5,
+        threatCount: 0
+      };
+      renderCybersecurityGame();
+      generateThreats();
+    }
+
+    function renderCybersecurityGame() {
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = `
+        <div class="max-w-4xl mx-auto fade-in">
+          <div class="flex items-center justify-between mb-6">
+            <button onclick="stopCybersecurityGame()" class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+              <span>←</span> Keluar
+            </button>
+            <div class="flex gap-4">
+              <div class="px-4 py-2 bg-green-500/20 rounded-full text-green-400 text-sm font-medium">
+                ✅ Tangkap: <span id="cyber-score">${cyberGameState.score}</span>
+              </div>
+              <div class="px-4 py-2 bg-red-500/20 rounded-full text-red-400 text-sm font-medium">
+                ❌ Lolos: ${cyberGameState.missed}
+              </div>
+              <div class="px-4 py-2 bg-purple-500/20 rounded-full text-purple-400 text-sm font-medium">
+                ⚡ Level: <span id="cyber-level">${cyberGameState.level}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="infographic-card rounded-2xl p-6 mb-6">
+            <h2 class="text-2xl font-bold mb-4">🛡️ Tangkap Ancaman Cyber!</h2>
+            <p class="text-gray-400 mb-4">Klik ancaman cyber sebelum menyerang sistem Anda. Hindari 5 ancaman = Game Over! Semakin lama semakin cepat.</p>
+            <div id="cyber-threats" class="relative min-h-96 border-2 border-blue-500/30 rounded-xl bg-slate-900/50 p-4">
+              <!-- Threats akan muncul di sini -->
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm">
+            ${threats.map(t => `
+              <div class="p-2 bg-slate-800/50 rounded border border-slate-600">
+                <span class="text-lg">${t.icon}</span> ${t.name}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function generateThreats() {
+      if (!cyberGameState.gameActive) return;
+
+      // Update level based on threats caught
+      cyberGameState.level = Math.floor(cyberGameState.score / 5) + 1;
+      document.getElementById('cyber-level').textContent = cyberGameState.level;
+
+      const threat = threats[Math.floor(Math.random() * threats.length)];
+      const threatEl = document.createElement('div');
+      threatEl.className = 'threat-item absolute p-4 rounded-xl cursor-pointer select-none transition-all transform hover:scale-110';
+      threatEl.style.left = Math.random() * 90 + '%';
+      threatEl.style.top = '-50px';
+      threatEl.style.background = 'linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(236, 72, 153, 0.3))';
+      threatEl.style.border = '2px solid rgb(239, 68, 68)';
+      threatEl.innerHTML = `<div class="text-3xl text-center">${threat.icon}</div><div class="text-xs text-red-300 mt-1 font-medium">${threat.name}</div>`;
+
+      let isClicked = false;
+      threatEl.addEventListener('click', () => {
+        if (isClicked) return;
+        isClicked = true;
+        gameScore++;
+        cyberGameState.score++;
+        document.getElementById('cyber-score').textContent = cyberGameState.score;
+        threatEl.style.opacity = '0';
+        threatEl.style.transform = 'scale(0.5)';
+        setTimeout(() => threatEl.remove(), 300);
+      });
+
+      const container = document.getElementById('cyber-threats');
+      if (container) {
+        container.appendChild(threatEl);
+      }
+
+      // Calculate speed based on level - semakin tinggi level semakin cepat
+      const speed = cyberGameState.baseSpeed - (cyberGameState.level * 0.3);
+      const actualSpeed = Math.max(2, speed); // Minimal speed 2px per update
+
+      // Animasi jatuh dengan kecepatan bertingkat
+      let top = -50;
+      const interval = setInterval(() => {
+        top += actualSpeed;
+        threatEl.style.top = top + 'px';
+
+        if (top > 400) {
+          clearInterval(interval);
+          if (threatEl.parentNode && !isClicked) {
+            threatEl.remove();
+            cyberGameState.missed++;
+            
+            if (cyberGameState.missed >= 5) {
+              cyberGameState.gameActive = false;
+              stopCybersecurityGame();
+              return;
+            }
+
+            if (cyberGameState.gameActive) {
+              setTimeout(generateThreats, 400);
+            }
+          }
+        }
+      }, 50);
+
+      if (cyberGameState.gameActive) {
+        // Spawn next threat dengan timing dinamis
+        const spawnDelay = Math.max(800, 2000 - (cyberGameState.level * 150));
+        setTimeout(generateThreats, spawnDelay);
+      }
+    }
+
+    function stopCybersecurityGame() {
+      cyberGameState.gameActive = false;
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = `
+        <div class="max-w-2xl mx-auto text-center fade-in">
+          <div class="infographic-card rounded-2xl p-8">
+            <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br ${cyberGameState.missed < 5 ? 'from-green-500 to-emerald-600' : 'from-red-500 to-rose-600'} flex items-center justify-center text-4xl mb-6">
+              ${cyberGameState.missed < 5 ? '🛡️' : '🚨'}
+            </div>
+            <h2 class="text-3xl font-bold mb-2">${cyberGameState.missed >= 5 ? 'Sistem Diretas!' : 'Sistem Aman!'}</h2>
+            <p class="text-gray-400 mb-6">Cybersecurity Defender</p>
+            
+            <div class="grid grid-cols-3 gap-4 mb-6">
+              <div class="p-4 bg-green-500/10 rounded-xl">
+                <div class="text-3xl font-bold text-green-400">${cyberGameState.score}</div>
+                <div class="text-sm text-gray-400">Ditangkap</div>
+              </div>
+              <div class="p-4 ${cyberGameState.missed < 5 ? 'bg-blue-500/10' : 'bg-red-500/10'} rounded-xl">
+                <div class="text-3xl font-bold ${cyberGameState.missed < 5 ? 'text-blue-400' : 'text-red-400'}">${cyberGameState.missed}</div>
+                <div class="text-sm text-gray-400">Lolos</div>
+              </div>
+              <div class="p-4 bg-purple-500/10 rounded-xl">
+                <div class="text-3xl font-bold text-purple-400">${cyberGameState.level}</div>
+                <div class="text-sm text-gray-400">Level</div>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl ${cyberGameState.missed < 5 ? 'bg-green-500/10 border border-green-500/30' : 'bg-red-500/10 border border-red-500/30'} mb-6">
+              <p class="${cyberGameState.missed < 5 ? 'text-green-300' : 'text-red-300'}">
+                ${cyberGameState.missed < 5 ? '✨ Sistem berhasil dipertahankan! Kamu sudah ahli dalam cybersecurity!' : '⚠️ Sistem berhasil diretas! Tingkatkan kewaspadaan Anda!'}
+              </p>
+            </div>
+
+            <div class="flex gap-4 justify-center">
+              <button onclick="showPage('games')" class="px-6 py-3 rounded-xl bg-slate-700 hover:bg-slate-600 transition-colors">
+                ← Game Lainnya
+              </button>
+              <button onclick="startCybersecurityGame()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 transition-all">
+                🔄 Main Lagi
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function showGameResult(gameName) {
+      const percentage = Math.round((gameScore / gameQuestions.length) * 100);
+      
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = `
+        <div class="max-w-2xl mx-auto text-center fade-in">
+          <div class="infographic-card rounded-2xl p-8">
+            <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br ${percentage >= 70 ? 'from-green-500 to-emerald-600' : 'from-orange-500 to-red-600'} flex items-center justify-center text-4xl mb-6">
+              ${percentage >= 70 ? '🏆' : '💪'}
+            </div>
+            <h2 class="text-3xl font-bold mb-2">Hasil ${gameName}</h2>
+            
+            <div class="text-6xl font-bold mb-2 ${percentage >= 70 ? 'text-green-400' : 'text-orange-400'}">
+              ${percentage}%
+            </div>
+            <p class="text-xl text-gray-300 mb-6">
+              ${gameScore} dari ${gameQuestions.length} benar
+            </p>
+
+            <div class="p-4 rounded-xl ${percentage >= 70 ? 'bg-green-500/10 border border-green-500/30' : 'bg-orange-500/10 border border-orange-500/30'} mb-6">
+              <p class="${percentage >= 70 ? 'text-green-300' : 'text-orange-300'}">
+                ${percentage >= 70 ? '🌟 Excellent! Kamu sangat memahami Kecerdasan Digital!' : '📚 Terus berlatih untuk meningkatkan kemampuanmu!'}
+              </p>
+            </div>
+
+            <div class="flex gap-4 justify-center">
+              <button onclick="showPage('games')" class="px-6 py-3 rounded-xl bg-slate-700 hover:bg-slate-600 transition-colors">
+                ← Game Lainnya
+              </button>
+              <button onclick="showPage('home')" class="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all">
+                Beranda →
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // POST TEST
+    let postTestIndex = 0;
+    let postTestScore = 0;
+    let postTestAnswered = false;
+    let studentName = '';
+
+    function renderPostTestPage() {
+      postTestIndex = 0;
+      postTestScore = 0;
+      postTestAnswered = false;
+      studentName = '';
+
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = `
+        <div class="max-w-2xl mx-auto fade-in">
+          <div class="text-center mb-8">
+            <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-4xl mb-4">
+              📝
+            </div>
+            <h1 class="text-3xl font-bold mb-2">Post Test</h1>
+            <p class="text-gray-400">Uji pemahaman keseluruhanmu tentang Kecerdasan Digital</p>
+          </div>
+
+          <div class="infographic-card rounded-2xl p-6 md:p-8">
+            <div class="mb-6">
+              <label class="block text-sm font-medium mb-2">Masukkan Nama Lengkap:</label>
+              <input type="text" id="student-name" placeholder="Nama lengkap..." class="w-full p-4 rounded-xl bg-slate-800 border border-slate-600 focus:border-orange-500 outline-none transition-colors">
+            </div>
+
+            <div class="p-4 bg-orange-500/10 rounded-xl border border-orange-500/30 mb-6">
+              <h4 class="font-semibold text-orange-400 mb-2">📋 Informasi Test:</h4>
+              <ul class="text-sm text-orange-200 space-y-1">
+                <li>• Jumlah soal: ${postTestQuestions.length} soal</li>
+                <li>• Nilai akan disimpan otomatis</li>
+                <li>• Kerjakan dengan jujur!</li>
+              </ul>
+            </div>
+
+            <button onclick="startPostTest()" class="w-full px-6 py-4 rounded-xl bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 transition-all font-bold text-lg">
+              🚀 Mulai Post Test
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function startPostTest() {
+      const nameInput = document.getElementById('student-name');
+      studentName = nameInput.value.trim();
+      
+      if (!studentName) {
+        nameInput.style.borderColor = '#ef4444';
+        nameInput.placeholder = 'Nama harus diisi!';
+        return;
+      }
+
+      renderPostTestQuestion();
+    }
+
+    function renderPostTestQuestion() {
+      if (postTestIndex >= postTestQuestions.length) {
+        finishPostTest();
+        return;
+      }
+
+      postTestAnswered = false;
+      const q = postTestQuestions[postTestIndex];
+      
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = `
+        <div class="max-w-2xl mx-auto slide-in">
+          <div class="flex items-center justify-between mb-6">
+            <div class="text-gray-400">
+              <span class="font-medium text-white">${studentName}</span>
+            </div>
+            <div class="px-4 py-2 bg-orange-500/20 rounded-full text-orange-400 text-sm">
+              Soal ${postTestIndex + 1} / ${postTestQuestions.length}
+            </div>
+          </div>
+
+          <div class="h-2 bg-slate-700 rounded-full mb-8 overflow-hidden">
+            <div class="h-full progress-bar rounded-full transition-all duration-500" style="width: ${((postTestIndex + 1) / postTestQuestions.length) * 100}%"></div>
+          </div>
+
+          <div class="infographic-card rounded-2xl p-6 md:p-8">
+            <p class="text-lg mb-6">${q.question}</p>
+
+            <div id="posttest-options" class="space-y-3">
+              ${q.options.map((option, idx) => `
+                <button onclick="checkPostTestAnswer(${idx}, ${q.correct})" class="quiz-option w-full p-4 text-left rounded-xl border border-slate-600 hover:border-orange-500 transition-all" data-index="${idx}">
+                  <span class="inline-block w-8 h-8 rounded-full bg-slate-700 text-center leading-8 mr-3">${String.fromCharCode(65 + idx)}</span>
+                  ${option}
+                </button>
+              `).join('')}
+            </div>
+
+            <div id="posttest-feedback" class="mt-6 hidden"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function checkPostTestAnswer(selected, correct) {
+      if (postTestAnswered) return;
+      postTestAnswered = true;
+
+      const options = document.querySelectorAll('.quiz-option');
+      options.forEach((opt, idx) => {
+        opt.classList.remove('hover:border-orange-500');
+        if (idx === correct) {
+          opt.classList.add('correct');
+        } else if (idx === selected && idx !== correct) {
+          opt.classList.add('incorrect');
+        }
+      });
+
+      const isCorrect = selected === correct;
+      if (isCorrect) postTestScore++;
+
+      const feedback = document.getElementById('posttest-feedback');
+      feedback.classList.remove('hidden');
+      feedback.innerHTML = `
+        <div class="p-4 rounded-xl ${isCorrect ? 'bg-green-500/20 border border-green-500/30' : 'bg-red-500/20 border border-red-500/30'}">
+          <p class="font-medium ${isCorrect ? 'text-green-400' : 'text-red-400'}">
+            ${isCorrect ? '✅ Benar!' : '❌ Salah!'}
+          </p>
+        </div>
+        <button onclick="nextPostTestQuestion()" class="mt-4 w-full px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 transition-all font-medium">
+          ${postTestIndex < postTestQuestions.length - 1 ? 'Soal Berikutnya →' : 'Selesai & Lihat Hasil'}
+        </button>
+      `;
+    }
+
+    function nextPostTestQuestion() {
+      postTestIndex++;
+      renderPostTestQuestion();
+    }
+
+    async function finishPostTest() {
+      const percentage = Math.round((postTestScore / postTestQuestions.length) * 100);
+      
+      // Save score
+      if (window.dataSdk && studentScores.length < 999) {
+        const result = await window.dataSdk.create({
+          student_name: studentName,
+          score: postTestScore,
+          total_questions: postTestQuestions.length,
+          percentage: percentage,
+          completed_at: new Date().toISOString()
+        });
+        
+        if (!result.isOk) {
+          console.error('Failed to save score');
+        }
+      }
+
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = `
+        <div class="max-w-2xl mx-auto text-center fade-in">
+          <div class="infographic-card rounded-2xl p-8">
+            <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br ${percentage >= 70 ? 'from-green-500 to-emerald-600' : 'from-orange-500 to-red-600'} flex items-center justify-center text-4xl mb-6">
+              ${percentage >= 100 ? '👑' : percentage >= 80 ? '🏆' : percentage >= 70 ? '🎉' : '💪'}
+            </div>
+            <h2 class="text-3xl font-bold mb-2">Hasil Post Test</h2>
+            <p class="text-gray-400 mb-6">Selamat, <span class="text-white font-medium">${studentName}</span>!</p>
+            
+            <div class="text-6xl font-bold mb-2 ${percentage >= 70 ? 'text-green-400' : 'text-orange-400'}">
+              ${percentage}
+            </div>
+            <p class="text-xl text-gray-300 mb-6">
+              ${postTestScore} dari ${postTestQuestions.length} soal benar
+            </p>
+
+            <div class="p-4 rounded-xl ${percentage >= 70 ? 'bg-green-500/10 border border-green-500/30' : 'bg-orange-500/10 border border-orange-500/30'} mb-6">
+              <p class="${percentage >= 70 ? 'text-green-300' : 'text-orange-300'}">
+                ${percentage >= 100 ? '👑 SEMPURNA! Kamu menguasai Kecerdasan Digital dengan luar biasa!' : 
+                  percentage >= 80 ? '🌟 Excellent! Pemahaman yang sangat baik!' : 
+                  percentage >= 70 ? '✨ Good job! Kamu sudah memahami dasar-dasar Kecerdasan Digital!' : 
+                  '📚 Terus belajar! Review materi untuk meningkatkan pemahamanmu.'}
+              </p>
+            </div>
+
+            <div class="bg-slate-800/50 p-4 rounded-xl mb-6">
+              <p class="text-sm text-gray-400">✅ Nilai telah disimpan ke papan nilai</p>
+            </div>
+
+            <div class="flex gap-4 justify-center flex-wrap">
+              <button onclick="showPage('scores')" class="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 transition-colors">
+                🏆 Lihat Papan Nilai
+              </button>
+              <button onclick="showPage('home')" class="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all">
+                Beranda →
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Render Scores Page
+    function renderScoresPage() {
+      const sortedScores = [...studentScores].sort((a, b) => b.percentage - a.percentage);
+      
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = `
+        <div class="max-w-4xl mx-auto fade-in">
+          <div class="text-center mb-8">
+            <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-4xl mb-4">
+              🏆
+            </div>
+            <h1 class="text-3xl font-bold mb-2">Papan Nilai</h1>
+            <p class="text-gray-400">Hasil Post Test Siswa</p>
+          </div>
+
+          ${sortedScores.length === 0 ? `
+            <div class="infographic-card rounded-2xl p-8 text-center">
+              <div class="text-6xl mb-4">📭</div>
+              <h3 class="text-xl font-bold mb-2">Belum Ada Data</h3>
+              <p class="text-gray-400 mb-6">Belum ada siswa yang menyelesaikan post test</p>
+              <button onclick="showPage('posttest')" class="px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 transition-all">
+                Ambil Post Test →
+              </button>
+            </div>
+          ` : `
+            <div class="infographic-card rounded-2xl overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="w-full">
+                  <thead>
+                    <tr class="border-b border-slate-700">
+                      <th class="p-4 text-left text-gray-400 font-medium">#</th>
+                      <th class="p-4 text-left text-gray-400 font-medium">Nama Siswa</th>
+                      <th class="p-4 text-center text-gray-400 font-medium">Skor</th>
+                      <th class="p-4 text-center text-gray-400 font-medium">Nilai</th>
+                      <th class="p-4 text-right text-gray-400 font-medium">Waktu</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${sortedScores.map((score, idx) => `
+                      <tr class="border-b border-slate-700/50 hover:bg-slate-800/50 transition-colors">
+                        <td class="p-4">
+                          ${idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `<span class="text-gray-500">${idx + 1}</span>`}
+                        </td>
+                        <td class="p-4 font-medium">${score.student_name}</td>
+                        <td class="p-4 text-center">${score.score}/${score.total_questions}</td>
+                        <td class="p-4 text-center">
+                          <span class="px-3 py-1 rounded-full text-sm font-bold ${score.percentage >= 80 ? 'bg-green-500/20 text-green-400' : score.percentage >= 60 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400'}">
+                            ${score.percentage}
+                          </span>
+                        </td>
+                        <td class="p-4 text-right text-sm text-gray-400">
+                          ${new Date(score.completed_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        </td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="infographic-card p-4 rounded-xl text-center">
+                <div class="text-2xl font-bold text-blue-400">${sortedScores.length}</div>
+                <div class="text-sm text-gray-400">Total Peserta</div>
+              </div>
+              <div class="infographic-card p-4 rounded-xl text-center">
+                <div class="text-2xl font-bold text-green-400">${Math.round(sortedScores.reduce((a, b) => a + b.percentage, 0) / sortedScores.length)}%</div>
+                <div class="text-sm text-gray-400">Rata-rata Nilai</div>
+              </div>
+              <div class="infographic-card p-4 rounded-xl text-center">
+                <div class="text-2xl font-bold text-purple-400">${sortedScores[0]?.percentage || 0}%</div>
+                <div class="text-sm text-gray-400">Nilai Tertinggi</div>
+              </div>
+            </div>
+          `}
+
+          <div class="mt-8 text-center">
+            <button onclick="showPage('home')" class="px-6 py-3 rounded-xl bg-slate-700 hover:bg-slate-600 transition-colors">
+              ← Kembali ke Beranda
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Initialize
+    async function init() {
+      await initElementSdk();
+      await initDataSdk();
+      updateUI();
+      showPage('home');
+    }
+
+    init();
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cf66c1d54583dc9',t:'MTc3MTM0MzIzNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
